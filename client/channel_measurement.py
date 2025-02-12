@@ -620,46 +620,6 @@ def tx_phase_coh(usrp, tx_streamer, quit_event, phase_corr, at_time, long_time=T
     return tx_thr, tx_meta_thr
 
 
-# def parse_arguments():
-#     import argparse
-
-#     global meas_id, gains_bash, exp_id, server_ip
-
-#     # Create the parser
-#     parser = argparse.ArgumentParser(description="Transmit with phase difference.")
-
-#     # Add the --phase argument
-#     parser.add_argument("--meas", type=int, help="measurement ID", required=True)
-
-#     parser.add_argument("--gain", type=int, nargs="+", help="gain_db", required=True)
-
-#     parser.add_argument("--exp", type=str, help="exp ID", required=True)
-
-#     parser.add_argument(
-#         "-i", "--ip", type=str, help="ip address of the server", required=False
-#     )
-
-#     # Parse the arguments
-#     args = parser.parse_args()
-
-#     # Set the global variable tx_phase to the value of --phase
-#     meas_id = args.meas
-
-#     # Access the gain values
-#     gains = args.gain
-
-#     # Handle cases where either one or two gain values are provided
-#     if len(gains) == 1:
-#         gains_bash = [gains[0], gains[0]]
-#     elif len(gains) == 2:
-#         gains_bash = gains
-#         print(f"Gain 1: {gains_bash[0]}, Gain 2: {gains_bash[1]}")
-#     else:
-#         print("Error: Too many gain values provided.")
-
-#     exp_id = args.exp
-
-
 def parse_arguments():
     import argparse
 
@@ -684,43 +644,44 @@ def parse_arguments():
 def main():
     global meas_id, file_name_state
 
-    parse_arguments()
+    parse_arguments()  # 解析服务器 IP 等参数
 
     try:
-        usrp = uhd.usrp.MultiUSRP(
-            "enable_user_regs, fpga=usrp_b210_fpga_loopback_ctrl.bin, mode_n=integer"
-        )
+        # 初始化 USRP 设备，加载指定 FPGA 固件
+        usrp = uhd.usrp.MultiUSRP("enable_user_regs, fpga=usrp_b210_fpga_loopback_ctrl.bin, mode_n=integer")
         logger.info("Using Device: %s", usrp.get_pp_string())
+
+        # 完成硬件设置、同步与调谐，获得 TX 与 RX streamer
         tx_streamer, rx_streamer = setup(usrp, server_ip, connect=True)
         quit_event = threading.Event()
+        result_queue = queue.Queue()
 
-        # 设置时间间隔，用于同步启动（你可以根据需要调整） (set the time interval for synchronized start)
+        # 设置测量时的时间参数（例如间隔一定的 margin，保证同步）
         margin = 2.0
         cmd_time = CAPTURE_TIME + margin
         start_next_cmd = cmd_time
 
-        # 使用 pilot 信号进行测量，得到信道的相位偏移 phi_P (measure the phase offset phi_P using the pilot signal)
-        result_queue = queue.Queue()
-        file_name_state = file_name + "_pilot"  # pilot 测量时保存 IQ 数据的文件名 (save IQ data to a file)
-        measure_pilot(
-            usrp, rx_streamer, quit_event, result_queue, at_time=start_next_cmd
-        )
+        # 仅进行 pilot 信号的测量
+        file_name_state = file_name + "_pilot"
+        measure_pilot(usrp, rx_streamer, quit_event, result_queue, at_time=start_next_cmd)
         phi_P = result_queue.get()
-        logger.info("Measured phi_P: %.6f", phi_P)
+        logger.info("Pilot signal measured phase: %.6f", phi_P)
 
-        # 将 phi_P 保存到文件中，例如保存为文本文件 save phi_P to a file
-        output_filename = file_name + "_phiP.txt"
-        with open(output_filename, "w") as f:
-            f.write(str(phi_P))
-        logger.info("phi_P has been saved to %s", output_filename)
+        # 调整测量起始时间，再进行环回信号的测量
+        start_next_cmd += cmd_time + 1.0
+        file_name_state = file_name + "_loopback"
+        measure_loopback(usrp, tx_streamer, rx_streamer, quit_event, result_queue, at_time=start_next_cmd)
+        phi_LB = result_queue.get()
+        logger.info("Loopback signal measured phase: %.6f", phi_LB)
 
-        # only save the phi_P
-        print("DONE")
+        # 此处你可以根据需要对 phi_P 和 phi_LB 进行进一步的处理或存储
+
+        print("Measurement DONE")
     except Exception as e:
-        logger.error(e)
+        logger.error("Error encountered: %s", e)
         quit_event.set()
     finally:
-        time.sleep(1)  # wait for the threads to finish
+        time.sleep(1)  # 给线程一些结束时间
         sys.exit(0)
 
 if __name__ == "__main__":
