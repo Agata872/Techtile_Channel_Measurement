@@ -674,7 +674,11 @@ def main():
         phi_LB = result_queue.get()
         logger.info("Loopback signal measured phase: %.6f", phi_LB)
 
-        # 此处你可以根据需要对 phi_P 和 phi_LB 进行进一步的处理或存储
+        # 保存测量结果到文件
+        results_filename = "measurement_results.txt"
+        with open(results_filename, "a") as f:
+            f.write(f"{datetime.now()}: Pilot phase: {phi_P:.6f}, Loopback phase: {phi_LB:.6f}\n")
+        logger.info("Measurement results saved to %s", results_filename)
 
         print("Measurement DONE")
     except Exception as e:

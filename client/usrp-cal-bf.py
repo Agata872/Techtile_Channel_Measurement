@@ -765,7 +765,6 @@ def main():
         #     phase_corr=phi_LB + phi_P,
         #     at_time=start_next_cmd,
         # )
-
         print("DONE")
     except Exception as e:
         # Interrupt and join the threads
