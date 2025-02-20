@@ -33,11 +33,11 @@ fi
 while true; do
   # Check if the --ip argument was provided
   if [[ -n "$ip" ]]; then
-      echo "Running with IP address: $ip"
-      python3 usrp-pilot.py --phase 0 --ip "$ip"
+      python3 channel_measurement.py --ip "$ip"
   else
-      python3 usrp-pilot.py --phase 0
+      python3 channel_measurement.py
   fi
+
   if [ $? -ne 0 ]; then
     echo "your script encountered an error."
     # Optionally, you can add a break or continue statement here to handle errors
