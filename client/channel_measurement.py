@@ -1,9 +1,9 @@
+#!/usr/bin/env python3
 import logging
 import os
 import socket
 import sys
-print(sys.executable)
-print(sys.path)
+sys.path.insert(0, "/home/dramco_tianzheng")
 import threading
 import time
 from datetime import datetime, timedelta
