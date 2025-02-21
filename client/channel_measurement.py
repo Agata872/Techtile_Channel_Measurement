@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import uhd
+print(uhd.__path__)
 import yaml
 
 
