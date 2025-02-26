@@ -3,7 +3,7 @@ import logging
 import os
 import socket
 import sys
-sys.path.insert(0, "/home/dramco_tianzheng")
+# sys.path.insert(0, "/home/dramco_tianzheng")
 import threading
 import time
 from datetime import datetime, timedelta
@@ -33,7 +33,6 @@ results = []
 
 SWITCH_LOOPBACK_MODE = 0x00000006 # which is 110
 SWITCH_RESET_MODE = 0x00000000
-
 import zmq
 
 context = zmq.Context()
@@ -306,7 +305,7 @@ def wait_till_go_from_server(ip, _connect=True):
     sync_socket.close()
 
 
-def setup(usrp, server_ip, connect=True):
+def setup(usrp, server_ip, connect=False):
     rate = RATE
     mcr = 20e6
     assert (
@@ -342,7 +341,8 @@ def setup(usrp, server_ip, connect=True):
     # Step2: set the time at the next pps (synchronous for all boards)
     # this is better than set_time_next_pps as we wait till the next PPS to transition and after that we set the time.
     # this ensures that the FPGA has enough time to clock in the new timespec (otherwise it could be too close to a PPS edge)
-    wait_till_go_from_server(server_ip, connect)
+    # wait_till_go_from_server(server_ip, connect)
+    # Todo: 设置 connect True或者False没卵用，所以只能先注释掉连接服务器
     logger.info("Setting device timestamp to 0...")
     usrp.set_time_unknown_pps(uhd.types.TimeSpec(0.0))
 
@@ -646,7 +646,8 @@ def parse_arguments():
 
 def main():
     global meas_id, file_name_state
-
+    global file_name
+    file_name = "data_offline"
     parse_arguments()  # 解析服务器 IP 等参数
 
     try:
@@ -655,7 +656,7 @@ def main():
         logger.info("Using Device: %s", usrp.get_pp_string())
 
         # 完成硬件设置、同步与调谐，获得 TX 与 RX streamer
-        tx_streamer, rx_streamer = setup(usrp, server_ip, connect=True)
+        tx_streamer, rx_streamer = setup(usrp, server_ip, connect=False)
         quit_event = threading.Event()
         result_queue = queue.Queue()
 
