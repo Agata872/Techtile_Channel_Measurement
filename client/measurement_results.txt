@@ -3,3 +3,12 @@
 2025-02-26 15:15:49.161695: Pilot phase: -2.227093, Loopback phase: 1.260183
 2025-02-26 15:16:27.161699: Pilot phase: -0.803668, Loopback phase: 0.028445
 2025-02-26 15:46:38.163098: Pilot phase: 0.019638, Loopback phase: -3.491020
+2025-02-27 14:28:26.163772: Pilot phase: -1.701161, Loopback phase: 1.187122
+2025-02-27 14:46:03.164120: Pilot phase: -0.882461, Loopback phase: -1.348608
+2025-02-27 14:48:01.163874: Pilot phase: 0.122350, Loopback phase: 0.325764
+2025-02-27 14:53:45.163422: Pilot phase: -3.426608, Loopback phase: -4.109842
+2025-02-27 14:55:03.163370: Pilot phase: 0.399415, Loopback phase: 0.071247
+2025-02-27 14:58:04.163179: Pilot phase: -1.625113, Loopback phase: -4.253964
+2025-02-27 14:59:20.163166: Pilot phase: 0.167802, Loopback phase: -4.565794
+2025-02-27 15:00:43.163025: Pilot phase: -2.089471, Loopback phase: -4.559419
+2025-02-28 09:38:56.161180: Pilot phase: -1.526164, Loopback phase: -0.470613

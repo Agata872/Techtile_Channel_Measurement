@@ -10,7 +10,6 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import uhd
-print(uhd.__path__)
 import yaml
 
 
@@ -520,9 +519,7 @@ def measure_pilot(usrp, rx_streamer, quit_event, result_queue, at_time=None):
     quit_event.clear()
 
 
-def measure_loopback(
-    usrp, tx_streamer, rx_streamer, quit_event, result_queue, at_time=None
-):
+def measure_loopback(usrp, tx_streamer, rx_streamer, quit_event, result_queue, at_time=None):
     logger.debug("########### Measure LOOPBACK ###########")
 
     # TX
@@ -672,11 +669,11 @@ def main():
         logger.info("Pilot signal measured phase: %.6f", phi_P)
 
         # 调整测量起始时间，再进行环回信号的测量
-        start_next_cmd += cmd_time + 1.0
-        file_name_state = file_name + "_loopback"
-        measure_loopback(usrp, tx_streamer, rx_streamer, quit_event, result_queue, at_time=start_next_cmd)
-        phi_LB = result_queue.get()
-        logger.info("Loopback signal measured phase: %.6f", phi_LB)
+        # start_next_cmd += cmd_time + 1.0
+        # file_name_state = file_name + "_loopback"
+        # measure_loopback(usrp, tx_streamer, rx_streamer, quit_event, result_queue, at_time=start_next_cmd)
+        # phi_LB = result_queue.get()
+        # logger.info("Loopback signal measured phase: %.6f", phi_LB)
 
         # 保存测量结果到文件
         results_filename = "measurement_results.txt"
