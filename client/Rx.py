@@ -1,79 +1,93 @@
 #!/usr/bin/env python3
 import logging
+import os
+import socket
 import sys
-import time
 import threading
+import time
 from datetime import datetime, timedelta
+import csv
+
 import numpy as np
 import uhd
+import yaml
+import zmq
 import queue
-import tools  # 请确保tools模块中包含get_phases_and_apply_bandpass、to_min_pi_plus_pi、circmean等函数
+import tools
 
-# 全局参数
+CMD_DELAY = 0.05               # 命令延时
+RX_TX_SAME_CHANNEL = True      # 同通道环回标志
+CLOCK_TIMEOUT = 1000           # 外部时钟锁定超时（ms）
+INIT_DELAY = 0.2               # 初始延时（秒）
 RATE = 250e3
-INIT_DELAY = 0.2
-CAPTURE_TIME = 10       # 采集时长（秒）
-RX_GAIN = 22
+LOOPBACK_TX_GAIN = 70          # 发射增益（经验值）
+RX_GAIN = 22                   # 接收增益（经验值）
+CAPTURE_TIME = 10              # 采集时间（秒）
 FREQ = 0
+meas_id = 0
+exp_id = 0
+results = []
 
-# 设置日志
-logging.basicConfig(level=logging.DEBUG,
-                    format="[%(asctime)s] [%(levelname)s] %(message)s")
+SWITCH_LOOPBACK_MODE = 0x00000006
+SWITCH_RESET_MODE = 0x00000000
+
+# 初始化 ZMQ（尽管本接收端脚本主要用于采集，但保留该部分代码）
+context = zmq.Context()
+iq_socket = context.socket(zmq.PUB)
+iq_socket.bind(f"tcp://*:{50001}")
+
+HOSTNAME = socket.gethostname()[4:]
+file_open = False
+server_ip = None  # 本接收端不依赖服务器
+
+# 读取 cal-settings.yml 中的配置（如有）
+with open(os.path.join(os.path.dirname(__file__), "cal-settings.yml"), "r") as file:
+    vars = yaml.safe_load(file)
+    globals().update(vars)  # 更新全局变量
+
+# 设置日志输出（自定义时间戳格式）
+class LogFormatter(logging.Formatter):
+    @staticmethod
+    def pp_now():
+        now = datetime.now()
+        return "{:%H:%M}:{:05.2f}".format(now, now.second + now.microsecond / 1e6)
+    def formatTime(self, record, datefmt=None):
+        converter = self.converter(record.created)
+        if datefmt:
+            formatted_date = converter.strftime(datefmt)
+        else:
+            formatted_date = LogFormatter.pp_now()
+        return formatted_date
+
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+console = logging.StreamHandler()
+formatter = LogFormatter(fmt="[%(asctime)s] [%(levelname)s] (%(threadName)-10s) %(message)s")
+console.setFormatter(formatter)
+logger.addHandler(console)
 
-# --------------------------
-# 辅助函数：delta 和 starting_in
-# --------------------------
-def delta(usrp, at_time):
-    return at_time - usrp.get_time_now().get_real_secs()
+# 根据 RX_TX_SAME_CHANNEL 定义各通道角色
+if RX_TX_SAME_CHANNEL:
+    REF_RX_CH = FREE_TX_CH = 0
+    LOOPBACK_RX_CH = LOOPBACK_TX_CH = 1
+    logger.debug("\nPLL REF-->CH0 RX\nCH1 TX-->CH1 RX\nCH0 TX -->")
+else:
+    LOOPBACK_RX_CH = FREE_TX_CH = 0
+    REF_RX_CH = LOOPBACK_TX_CH = 1
+    logger.debug("\nPLL REF-->CH1 RX\nCH1 TX-->CH0 RX\nCH0 TX -->")
 
-def starting_in(usrp, at_time):
-    return f"Starting in {delta(usrp, at_time):.2f}s"
-
-# --------------------------
-# USRP 初始化及配置
-# --------------------------
-def setup_usrp(usrp):
-    mcr = 20e6
-    usrp.set_master_clock_rate(mcr)
-    channels = [0, 1]
-    # 使用外部时钟和 PPS 同步
-    usrp.set_clock_source("external")
-    usrp.set_time_source("external")
-    rx_bw = 200e3
-    for chan in channels:
-        usrp.set_rx_rate(RATE, chan)
-        usrp.set_tx_rate(RATE, chan)  # 即使不发射也建议设置一致
-        usrp.set_rx_dc_offset(True, chan)
-        usrp.set_rx_bandwidth(rx_bw, chan)
-        usrp.set_rx_agc(False, chan)
-    # 设置 RX 增益（对通道0，此处可根据需要调整天线选择）
-    usrp.set_rx_gain(RX_GAIN, 0)
-    st_args = uhd.usrp.StreamArgs("fc32", "sc16")
-    st_args.channels = channels
-    rx_streamer = usrp.get_rx_stream(st_args)
-    # 同步时间
-    usrp.set_time_unknown_pps(uhd.types.TimeSpec(0.0))
-    time.sleep(2)
-    # 调谐（这里简单调谐到FREQ，具体细节可根据实际需求扩展）
-    tune_req_time = INIT_DELAY
-    tune_req = uhd.types.TuneRequest(FREQ)
-    for chan in channels:
-        usrp.set_rx_freq(tune_req, chan)
-    logger.info("USRP 调谐完成，当前时间：%.6f", usrp.get_time_now().get_real_secs())
-    return rx_streamer
-
-# --------------------------
-# 接收数据处理函数 rx_ref
-# --------------------------
+# ---------------------------
+# 接收端相关函数
+# ---------------------------
 def rx_ref(usrp, rx_streamer, quit_event, duration, result_queue, start_time=None):
-    logger.debug("rx_ref 开始采集数据，采集时长: %s 秒", duration)
+    logger.debug("rx_ref: 开始采集数据，采集时长: %s 秒", duration)
     num_channels = rx_streamer.get_num_channels()
     max_samps_per_packet = rx_streamer.get_max_num_samps()
     buffer_length = int(duration * RATE * 2)
     iq_data = np.empty((num_channels, buffer_length), dtype=np.complex64)
     recv_buffer = np.zeros((num_channels, max_samps_per_packet), dtype=np.complex64)
     rx_md = uhd.types.RXMetadata()
+
     stream_cmd = uhd.types.StreamCMD(uhd.types.StreamMode.start_cont)
     stream_cmd.stream_now = False
     timeout = 1.0
@@ -85,60 +99,94 @@ def rx_ref(usrp, rx_streamer, quit_event, duration, result_queue, start_time=Non
     else:
         stream_cmd.time_spec = uhd.types.TimeSpec(usrp.get_time_now().get_real_secs() + INIT_DELAY + 0.1)
     rx_streamer.issue_stream_cmd(stream_cmd)
-    num_rx = 0
     try:
+        num_rx = 0
         while not quit_event.is_set():
             try:
                 num_rx_i = rx_streamer.recv(recv_buffer, rx_md, timeout)
                 if rx_md.error_code != uhd.types.RXMetadataErrorCode.none:
-                    logger.error("RX 错误: %s", rx_md.error_code)
+                    logger.error("RX error: %s", rx_md.error_code)
                 else:
                     if num_rx_i > 0:
                         samples = recv_buffer[:, :num_rx_i]
                         if num_rx + num_rx_i > buffer_length:
-                            logger.error("RX 缓冲区溢出")
+                            logger.error("采集数据超出预设缓冲区")
                         else:
                             iq_data[:, num_rx:num_rx+num_rx_i] = samples
                             num_rx += num_rx_i
             except RuntimeError as ex:
-                logger.error("RX 运行时错误: %s", ex)
+                logger.error("rx_ref 运行时错误: %s", ex)
                 break
     except KeyboardInterrupt:
         pass
     finally:
-        logger.debug("rx_ref 结束采集")
+        logger.debug("rx_ref: 采集结束，关闭流")
         rx_streamer.issue_stream_cmd(uhd.types.StreamCMD(uhd.types.StreamMode.stop_cont))
-        # 截取有效数据进行处理（例如跳过初始部分）
-        iq_samples = iq_data[:, int(RATE//10):num_rx]
-        np.save("rx_pilot_iq_data.npy", iq_samples)
-        # 利用 tools 模块处理 IQ 数据，计算两通道之间的相位差
-        phase_ch0, _ = tools.get_phases_and_apply_bandpass(iq_samples[0, :])
-        phase_ch1, _ = tools.get_phases_and_apply_bandpass(iq_samples[1, :])
-        phase_diff = tools.to_min_pi_plus_pi(phase_ch0 - phase_ch1, deg=False)
-        pilot_phase = np.mean(phase_diff)
-        result_queue.put(pilot_phase)
-        logger.debug("计算得到的 pilot 相位: %.6f", pilot_phase)
+        # 截取有效数据（略去前面部分）
+        iq_samples = iq_data[:, int(RATE // 10):num_rx]
 
-# --------------------------
-# 启动 RX 线程
-# --------------------------
-def rx_thread(usrp, rx_streamer, quit_event, duration, result_queue, start_time=None):
-    _rx_thread = threading.Thread(target=rx_ref, args=(usrp, rx_streamer, quit_event, duration, result_queue, start_time))
+        # 保存 IQ 数据到 .npy 文件，文件名由 file_name_state 决定
+        np.save(file_name_state, iq_samples)
+        logger.debug("IQ 数据已保存为 %s.npy", file_name_state)
+
+        # 保存 IQ 数据为 CSV 文件
+        csv_filename = file_name_state + ".csv"
+        with open(csv_filename, 'w', newline='') as csvfile:
+            csv_writer = csv.writer(csvfile)
+            # 写入表头，根据通道数生成列标题（每个通道的实部和虚部）
+            header = []
+            for ch in range(iq_samples.shape[0]):
+                header.extend([f"ch{ch}_real", f"ch{ch}_imag"])
+            csv_writer.writerow(header)
+            # 写入数据，每行保存各通道同一采样点的实部和虚部
+            n_samples = iq_samples.shape[1]
+            for i in range(n_samples):
+                row = []
+                for ch in range(iq_samples.shape[0]):
+                    row.extend([iq_samples[ch, i].real, iq_samples[ch, i].imag])
+                csv_writer.writerow(row)
+        logger.debug("IQ 数据已保存为 CSV 文件：%s", csv_filename)
+
+        # 利用 tools 模块处理 IQ 数据，计算 pilot 信号相位
+        phase_ch0, freq_slope_ch0 = tools.get_phases_and_apply_bandpass(iq_samples[0, :])
+        phase_ch1, freq_slope_ch1 = tools.get_phases_and_apply_bandpass(iq_samples[1, :])
+        logger.debug("Frequency offset CH0: %.4f", freq_slope_ch0 / (2*np.pi))
+        logger.debug("Frequency offset CH1: %.4f", freq_slope_ch1 / (2*np.pi))
+        phase_diff = tools.to_min_pi_plus_pi(phase_ch0 - phase_ch1, deg=False)
+        _circ_mean = tools.circmean(phase_diff, deg=False)
+        _mean = np.mean(phase_diff)
+        logger.debug("Diff cirmean and mean: %.6f", _circ_mean - _mean)
+        result_queue.put(_mean)
+
+        avg_ampl = np.mean(np.abs(iq_samples), axis=1)
+        max_I = np.max(np.abs(np.real(iq_samples)), axis=1)
+        max_Q = np.max(np.abs(np.imag(iq_samples)), axis=1)
+        logger.debug("MAX AMPL IQ CH0: I %.6f Q %.6f CH1: I %.6f Q %.6f", max_I[0], max_Q[0], max_I[1], max_Q[1])
+        logger.debug("AVG AMPL IQ CH0: %.6f CH1: %.6f", avg_ampl[0], avg_ampl[1])
+
+def rx_thread(usrp, rx_streamer, quit_event, duration, res, start_time=None):
+    _rx_thread = threading.Thread(
+        target=rx_ref,
+        args=(usrp, rx_streamer, quit_event, duration, res, start_time),
+    )
     _rx_thread.setName("RX_thread")
     _rx_thread.start()
     return _rx_thread
 
-# --------------------------
-# measure_pilot 函数（保留初始代码中的实现）
-# --------------------------
+def delta(usrp, at_time):
+    return at_time - usrp.get_time_now().get_real_secs()
+
+def starting_in(usrp, at_time):
+    return f"Starting in {delta(usrp, at_time):.2f}s"
+
 def measure_pilot(usrp, rx_streamer, quit_event, result_queue, at_time=None):
     logger.debug("########### Measure PILOT ###########")
     start_time = uhd.types.TimeSpec(at_time)
     logger.debug(starting_in(usrp, at_time))
-    # 切换到“TX/RX”天线模式（假设该设置适用于硬件）
+    # 设置 RX 天线为 “TX/RX” 模式（硬件要求）
     usrp.set_rx_antenna("TX/RX", 1)
-    rx_thr = rx_thread(usrp, rx_streamer, quit_event, duration=CAPTURE_TIME, result_queue=result_queue, start_time=start_time)
-    # 等待采集时长结束
+    rx_thr = rx_thread(usrp, rx_streamer, quit_event, duration=CAPTURE_TIME, res=result_queue, start_time=start_time)
+    # 等待采集时长（加上启动延时补偿）
     sleep_time = CAPTURE_TIME + delta(usrp, at_time)
     if sleep_time < 0:
         sleep_time = CAPTURE_TIME
@@ -149,36 +197,144 @@ def measure_pilot(usrp, rx_streamer, quit_event, result_queue, at_time=None):
     usrp.set_rx_antenna("RX2", 1)
     quit_event.clear()
 
-# --------------------------
-# 主函数
-# --------------------------
+# ---------------------------
+# 时钟、调谐、同步设置等函数（沿用最初代码）
+# ---------------------------
+def setup_clock(usrp, clock_src, num_mboards):
+    usrp.set_clock_source(clock_src)
+    logger.debug("Now confirming lock on clock signals...")
+    end_time = datetime.now() + timedelta(milliseconds=CLOCK_TIMEOUT)
+    for i in range(num_mboards):
+        is_locked = usrp.get_mboard_sensor("ref_locked", i)
+        while (not is_locked) and (datetime.now() < end_time):
+            time.sleep(1e-3)
+            is_locked = usrp.get_mboard_sensor("ref_locked", i)
+        if not is_locked:
+            logger.error("Unable to confirm clock signal locked on board %d", i)
+            return False
+        else:
+            logger.debug("Clock signals are locked")
+    return True
+
+def setup_pps(usrp, pps):
+    logger.debug("Setting PPS")
+    usrp.set_time_source(pps)
+    return True
+
+def print_tune_result(tune_res):
+    logger.debug(
+        "Tune Result:\n    Target RF  Freq: %.6f (MHz)\n Actual RF  Freq: %.6f (MHz)\n Target DSP Freq: %.6f (MHz)\n Actual DSP Freq: %.6f (MHz)\n",
+        (tune_res.target_rf_freq / 1e6),
+        (tune_res.actual_rf_freq / 1e6),
+        (tune_res.target_dsp_freq / 1e6),
+        (tune_res.actual_dsp_freq / 1e6),
+    )
+
+def tune_usrp(usrp, freq, channels, at_time):
+    treq = uhd.types.TuneRequest(freq)
+    usrp.set_command_time(uhd.types.TimeSpec(at_time))
+    treq.dsp_freq = 0.0
+    treq.target_freq = freq
+    treq.rf_freq = freq
+    treq.rf_freq_policy = uhd.types.TuneRequestPolicy(ord("M"))
+    treq.dsp_freq_policy = uhd.types.TuneRequestPolicy(ord("M"))
+    args = uhd.types.DeviceAddr("mode_n=integer")
+    treq.args = args
+    rx_freq = freq - 1e3
+    rreq = uhd.types.TuneRequest(rx_freq)
+    rreq.rf_freq = rx_freq
+    rreq.target_freq = rx_freq
+    rreq.dsp_freq = 0.0
+    rreq.rf_freq_policy = uhd.types.TuneRequestPolicy(ord("M"))
+    rreq.dsp_freq_policy = uhd.types.TuneRequestPolicy(ord("M"))
+    rreq.args = uhd.types.DeviceAddr("mode_n=fractional")
+    for chan in channels:
+        print_tune_result(usrp.set_rx_freq(rreq, chan))
+        print_tune_result(usrp.set_tx_freq(treq, chan))
+    while not usrp.get_rx_sensor("lo_locked").to_bool():
+        print(".")
+        time.sleep(0.01)
+    logger.info("RX LO is locked")
+    while not usrp.get_tx_sensor("lo_locked").to_bool():
+        print(".")
+        time.sleep(0.01)
+    logger.info("TX LO is locked")
+
+def setup(usrp, server_ip, connect=False):
+    rate = RATE
+    mcr = 20e6
+    assert (mcr / rate).is_integer(), f"The masterclock rate {mcr} should be an integer multiple of the sampling rate {rate}"
+    usrp.set_master_clock_rate(mcr)
+    channels = [0, 1]
+    setup_clock(usrp, "external", usrp.get_num_mboards())
+    setup_pps(usrp, "external")
+    rx_bw = 200e3
+    for chan in channels:
+        usrp.set_rx_rate(rate, chan)
+        usrp.set_tx_rate(rate, chan)
+        usrp.set_rx_dc_offset(True, chan)
+        usrp.set_rx_bandwidth(rx_bw, chan)
+        usrp.set_rx_agc(False, chan)
+    # 发射端与接收端设置：接收端主要关注 REF_RX_CH 的接收增益
+    usrp.set_tx_gain(LOOPBACK_TX_GAIN, LOOPBACK_TX_CH)
+    usrp.set_tx_gain(LOOPBACK_TX_GAIN, FREE_TX_CH)
+    usrp.set_rx_gain(LOOPBACK_RX_GAIN, LOOPBACK_RX_CH)
+    usrp.set_rx_gain(REF_RX_GAIN, REF_RX_CH)
+    st_args = uhd.usrp.StreamArgs("fc32", "sc16")
+    st_args.channels = channels
+    tx_streamer = usrp.get_tx_stream(st_args)
+    rx_streamer = usrp.get_rx_stream(st_args)
+    logger.info("Setting device timestamp to 0...")
+    usrp.set_time_unknown_pps(uhd.types.TimeSpec(0.0))
+    usrp.set_time_unknown_pps(uhd.types.TimeSpec(0.0))
+    logger.debug("[SYNC] Resetting time.")
+    logger.info(f"RX GAIN PROFILE CH0: {usrp.get_rx_gain_names(0)}")
+    logger.info(f"RX GAIN PROFILE CH1: {usrp.get_rx_gain_names(1)}")
+    time.sleep(2)
+    tune_usrp(usrp, FREQ, channels, at_time=INIT_DELAY)
+    logger.info(f"USRP tuned and setup. (Current time: {usrp.get_time_now().get_real_secs()})")
+    return tx_streamer, rx_streamer
+
+# ---------------------------
+# 主程序：仅进行 pilot 信号测量
+# ---------------------------
 def main():
-    rx_args = "addr=192.108.1.161, enable_user_regs, fpga=usrp_b210_fpga_loopback_ctrl.bin, mode_n=integer"
+    global file_name_state, file_name
+    file_name = "data_offline"
+    file_name_state = file_name + "_pilot"
     try:
-        usrp = uhd.usrp.MultiUSRP(rx_args)
-        logger.info("RX USRP初始化成功: %s", usrp.get_pp_string())
+        # 初始化 USRP 设备（加载指定 FPGA 固件）
+        usrp = uhd.usrp.MultiUSRP("enable_user_regs, fpga=usrp_b210_fpga_loopback_ctrl.bin, mode_n=integer")
+        logger.info("Using Device: %s", usrp.get_pp_string())
+
+        # 硬件设置、同步与调谐
+        tx_streamer, rx_streamer = setup(usrp, server_ip, connect=False)
+        quit_event = threading.Event()
+        result_queue = queue.Queue()
+
+        # 设置测量启动时间：当前时间后 5 秒
+        current_time = usrp.get_time_now().get_real_secs()
+        start_time_val = current_time + 5.0
+        logger.info("Scheduled RX start time: %.6f", start_time_val)
+
+        # 使用 measure_pilot 进行 pilot 信号测量
+        measure_pilot(usrp, rx_streamer, quit_event, result_queue, at_time=start_time_val)
+        phi_P = result_queue.get()
+        logger.info("Pilot signal measured phase: %.6f", phi_P)
+
+        # 将测量结果保存到文件中
+        results_filename = "measurement_results.txt"
+        with open(results_filename, "a") as f:
+            f.write(f"{datetime.now()}: Pilot phase: {phi_P:.6f}\n")
+        logger.info("Measurement results saved to %s", results_filename)
+
+        print("Measurement DONE")
     except Exception as e:
-        logger.error("RX USRP初始化失败: %s", e)
-        sys.exit(1)
-    rx_streamer = setup_usrp(usrp)
-    quit_event = threading.Event()
-    result_queue = queue.Queue()
-
-    # 预定采集启动时刻，取当前时间加5秒
-    current_time = usrp.get_time_now().get_real_secs()
-    start_time_val = current_time + 5.0
-    logger.info("预定 RX 启动时刻: %.6f", start_time_val)
-
-    # 使用 measure_pilot 函数完成 pilot 信号的采集与测量
-    measure_pilot(usrp, rx_streamer, quit_event, result_queue, at_time=start_time_val)
-
-    if not result_queue.empty():
-        pilot_phase = result_queue.get()
-        logger.info("最终测量到的 pilot 相位: %.6f", pilot_phase)
-    else:
-        logger.error("未获得测量结果")
-
-    logger.info("RX 脚本运行结束")
+        logger.error("Error encountered: %s", e)
+        quit_event.set()
+    finally:
+        time.sleep(1)
+        sys.exit(0)
 
 if __name__ == "__main__":
     main()
