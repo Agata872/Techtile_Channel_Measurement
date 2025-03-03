@@ -194,7 +194,7 @@ def measure_pilot(usrp, rx_streamer, quit_event, result_queue, at_time=None):
     quit_event.set()
     rx_thr.join()
     # 恢复天线设置
-    usrp.set_rx_antenna("RX2", 1)
+    usrp.set_rx_antenna("RX2", 0)
     quit_event.clear()
 
 # ---------------------------
