@@ -184,7 +184,7 @@ def measure_pilot(usrp, rx_streamer, quit_event, result_queue, at_time=None):
     start_time = uhd.types.TimeSpec(at_time)
     logger.debug(starting_in(usrp, at_time))
     # 设置 RX 天线为 “TX/RX” 模式（硬件要求）
-    usrp.set_rx_antenna("TX/RX", 1)
+    usrp.set_rx_antenna("TX/RX", 0)
     rx_thr = rx_thread(usrp, rx_streamer, quit_event, duration=CAPTURE_TIME, res=result_queue, start_time=start_time)
     # 等待采集时长（加上启动延时补偿）
     sleep_time = CAPTURE_TIME + delta(usrp, at_time)
