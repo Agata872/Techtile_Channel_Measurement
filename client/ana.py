@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 RATE = 250e3
 
 # CSV 文件名（请根据实际情况修改）
-csv_filename = "data_offline_pilot.csv"
+csv_filename = "data_offline_pilot_9.csv"
 
 # 读取 CSV 文件，假设文件中有表头：ch0_real,ch0_imag,ch1_real,ch1_imag
 df = pd.read_csv(csv_filename)

@@ -19,13 +19,13 @@ def run_remote_script(ip, script_path):
     """
     # 在命令中导出 PYTHONPATH 和 UHD_IMAGES_DIR 环境变量，然后调用 python3 运行脚本
     remote_cmd = (
+        'cd ~/Techtile_Channel_Measurement/client && '
         'export PYTHONPATH="/usr/local/lib/python3.11/site-packages:$PYTHONPATH"; '
         f'python3 {script_path}'
     )
-
     cmd = ["ssh", f"{ip}", remote_cmd]
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True)
+        result = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
         print(f"【{ip}】脚本输出：\n{result.stdout}")
         if result.stderr:
             print(f"【{ip}】脚本错误输出：\n{result.stderr}")
