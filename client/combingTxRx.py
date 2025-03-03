@@ -14,11 +14,15 @@ RX_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Rx.py"
 
 def run_remote_script(ip, script_path):
     """
-    使用交互式登录 Shell 通过 SSH 执行远程脚本，
-    这样远程会话将加载登录时配置的所有环境变量。
+    通过 SSH 执行远程脚本，在远程命令中先导出必要的环境变量，
+    以确保非交互式 Shell 环境下可以找到 uhd 模块和固件。
     """
-    # 使用 bash -l -c 'python3 <script_path>' 形式调用，确保加载环境
-    remote_cmd = f"bash -l -c 'python3 {script_path}'"
+    # 在命令中导出 PYTHONPATH 和 UHD_IMAGES_DIR 环境变量，然后调用 python3 运行脚本
+    remote_cmd = (
+        'export PYTHONPATH="/usr/local/lib/python3.11/site-packages:$PYTHONPATH"; '
+        f'python3 {script_path}'
+    )
+
     cmd = ["ssh", f"{ip}", remote_cmd]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True)
