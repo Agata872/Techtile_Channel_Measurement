@@ -214,7 +214,7 @@ def tx_ref(usrp, tx_streamer, quit_event, phase, amplitude, start_time=None):
         logger.info("TX finished.")
 
 
-def tx_thread(usrp, tx_streamer, quit_event, phase=[0, 0], amplitude=[3, 3], start_time=None):
+def tx_thread(usrp, tx_streamer, quit_event, phase=[0, 0], amplitude=[0.8, 0.8], start_time=None):
     tx_thr = threading.Thread(target=tx_ref, args=(usrp, tx_streamer, quit_event, phase, amplitude, start_time))
     tx_thr.setName("TX_thread")
     tx_thr.start()
@@ -270,7 +270,7 @@ def main():
         logger.info("Scheduled TX start time: %.6f", start_time_val)
 
         # 启动 TX 发射线程：此处信号参数设为幅度 0.8，相位 0.0（两个通道）
-        tx_thr = tx_thread(usrp, tx_streamer, quit_event, phase=[0.0, 0.0], amplitude=[0.8, 0.8],
+        tx_thr = tx_thread(usrp, tx_streamer, quit_event, phase=[0.0, 0.0], amplitude=[1.0, 1.0],
                            start_time=start_time_spec)
         # 同时启动 TX 异步元数据监控线程
         tx_meta_thr = tx_meta_thread(tx_streamer, quit_event)
