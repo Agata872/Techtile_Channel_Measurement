@@ -276,7 +276,7 @@ def main():
         tx_meta_thr = tx_meta_thread(tx_streamer, quit_event)
 
         # 运行一段时间后停止发射
-        time.sleep(CAPTURE_TIME + 5.0)
+        time.sleep(CAPTURE_TIME + 20.0)
         quit_event.set()
         tx_thr.join()
         tx_meta_thr.join()
