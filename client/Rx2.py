@@ -130,22 +130,22 @@ def rx_ref(usrp, rx_streamer, quit_event, duration, result_queue, start_time=Non
         logger.debug("IQ 数据已保存为 %s.npy", file_name_state)
 
         # 保存 IQ 数据为 CSV 文件
-        csv_filename = file_name_state + ".csv"
-        with open(csv_filename, 'w', newline='') as csvfile:
-            csv_writer = csv.writer(csvfile)
-            # 写入表头，根据通道数生成列标题（每个通道的实部和虚部）
-            header = []
-            for ch in range(iq_samples.shape[0]):
-                header.extend([f"ch{ch}_real", f"ch{ch}_imag"])
-            csv_writer.writerow(header)
-            # 写入数据，每行保存各通道同一采样点的实部和虚部
-            n_samples = iq_samples.shape[1]
-            for i in range(n_samples):
-                row = []
-                for ch in range(iq_samples.shape[0]):
-                    row.extend([iq_samples[ch, i].real, iq_samples[ch, i].imag])
-                csv_writer.writerow(row)
-        logger.debug("IQ 数据已保存为 CSV 文件：%s", csv_filename)
+        # csv_filename = file_name_state + ".csv"
+        # with open(csv_filename, 'w', newline='') as csvfile:
+        #     csv_writer = csv.writer(csvfile)
+        #     # 写入表头，根据通道数生成列标题（每个通道的实部和虚部）
+        #     header = []
+        #     for ch in range(iq_samples.shape[0]):
+        #         header.extend([f"ch{ch}_real", f"ch{ch}_imag"])
+        #     csv_writer.writerow(header)
+        #     # 写入数据，每行保存各通道同一采样点的实部和虚部
+        #     n_samples = iq_samples.shape[1]
+        #     for i in range(n_samples):
+        #         row = []
+        #         for ch in range(iq_samples.shape[0]):
+        #             row.extend([iq_samples[ch, i].real, iq_samples[ch, i].imag])
+        #         csv_writer.writerow(row)
+        # logger.debug("IQ 数据已保存为 CSV 文件：%s", csv_filename)
 
         # 利用 tools 模块处理 IQ 数据，计算 pilot 信号相位
         phase_ch0, freq_slope_ch0 = tools.get_phases_and_apply_bandpass(iq_samples[0, :])
@@ -316,7 +316,8 @@ def main():
         # 第一轮测量：设定启动时间为当前时间后 5 秒，并保存为 round1 文件
         current_time = usrp.get_time_now().get_real_secs()
         start_time_val = current_time + 5.0
-        file_name_state = f"{file_name}_pilot_round1"
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        file_name_state = f"{file_name}_pilot_round1_{timestamp}"
         logger.info("Scheduled first RX start time: %.6f", start_time_val)
         measure_pilot(usrp, rx_streamer, quit_event, result_queue, at_time=start_time_val)
         phi1 = result_queue.get()
@@ -329,7 +330,8 @@ def main():
 
         # 第二轮测量：设置启动时间为当前时间稍后（0.2秒后），并保存为 round2 文件
         start_time_val = usrp.get_time_now().get_real_secs() + 0.2
-        file_name_state = f"{file_name}_pilot_round2"
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        file_name_state = f"{file_name}_pilot_round2_{timestamp}"
         logger.info("Scheduled second RX start time: %.6f", start_time_val)
         measure_pilot(usrp, rx_streamer, quit_event, result_queue, at_time=start_time_val)
         phi2 = result_queue.get()
