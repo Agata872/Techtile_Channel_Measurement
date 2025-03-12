@@ -38,7 +38,7 @@ iq_socket.bind(f"tcp://*:{50001}")
 
 HOSTNAME = socket.gethostname()[4:]
 file_open = False
-server_ip = None  # 本接收端不依赖服务器
+server_ip = None  # 本接收端不依赖服务器，后续同步服务器IP将在同步阶段指定
 
 # 读取 cal-settings.yml 中的配置（如有）
 with open(os.path.join(os.path.dirname(__file__), "cal-settings.yml"), "r") as file:
@@ -128,24 +128,6 @@ def rx_ref(usrp, rx_streamer, quit_event, duration, result_queue, start_time=Non
         # 保存 IQ 数据到 .npy 文件，文件名由 file_name_state 决定
         np.save(file_name_state, iq_samples)
         logger.debug("IQ 数据已保存为 %s.npy", file_name_state)
-
-        # # 保存 IQ 数据为 CSV 文件
-        # csv_filename = file_name_state + ".csv"
-        # with open(csv_filename, 'w', newline='') as csvfile:
-        #     csv_writer = csv.writer(csvfile)
-        #     # 写入表头，根据通道数生成列标题（每个通道的实部和虚部）
-        #     header = []
-        #     for ch in range(iq_samples.shape[0]):
-        #         header.extend([f"ch{ch}_real", f"ch{ch}_imag"])
-        #     csv_writer.writerow(header)
-        #     # 写入数据，每行保存各通道同一采样点的实部和虚部
-        #     n_samples = iq_samples.shape[1]
-        #     for i in range(n_samples):
-        #         row = []
-        #         for ch in range(iq_samples.shape[0]):
-        #             row.extend([iq_samples[ch, i].real, iq_samples[ch, i].imag])
-        #         csv_writer.writerow(row)
-        # logger.debug("IQ 数据已保存为 CSV 文件：%s", csv_filename)
 
         # 利用 tools 模块处理 IQ 数据，计算 pilot 信号相位
         phase_ch0, freq_slope_ch0 = tools.get_phases_and_apply_bandpass(iq_samples[0, :])
@@ -316,9 +298,33 @@ def main():
         quit_event = threading.Event()
         result_queue = queue.Queue()
 
-        # 第一轮测量：设定启动时间为当前时间后 5 秒，并保存为 round1 文件
+        # =========================
+        # 新增：与同步服务器进行通信
+        # =========================
+        # 请将下面的 IP 替换为你的同步服务器的实际 IP 地址
+        sync_server_ip = "192.108.1.148"  # 修改为实际的服务器IP
+        sync_context = zmq.Context()
+        # 建立 REQ socket 与服务器的 alive 端口（5558）通信
+        alive_client = sync_context.socket(zmq.REQ)
+        alive_client.connect(f"tcp://{sync_server_ip}:5558")
+        alive_message = f"{HOSTNAME} RX1 alive"
+        logger.info("Sending alive message to sync server: %s", alive_message)
+        alive_client.send_string(alive_message)
+        reply = alive_client.recv_string()
+        logger.info("Received alive reply from sync server: %s", reply)
+
+        # 建立 SUB socket 监听同步消息（5557端口）
+        sync_subscriber = sync_context.socket(zmq.SUB)
+        sync_subscriber.connect(f"tcp://{sync_server_ip}:5557")
+        sync_subscriber.setsockopt_string(zmq.SUBSCRIBE, "")
+        logger.info("Waiting for SYNC message from sync server...")
+        sync_msg = sync_subscriber.recv_string()
+        logger.info("Received SYNC message: %s", sync_msg)
+
+        # =========================
+        # 第一轮测量：收到同步消息后启动采集
         current_time = usrp.get_time_now().get_real_secs()
-        start_time_val = current_time + 5.0
+        start_time_val = current_time + 0.2  # 小延时确保同步
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         file_name_state = f"{file_name}_pilot_round1_{timestamp}"
         logger.info("Scheduled first RX start time: %.6f", start_time_val)
@@ -349,8 +355,6 @@ def main():
 
         with open("phase_saveRx1.csv", "a", newline="") as csvfile:
             csv_writer = csv.writer(csvfile)
-            # 如果文件第一次写入，可以先写入表头
-            # csv_writer.writerow(["Timestamp", "Round", "Phase"])
             csv_writer.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "Round1", phi1])
             csv_writer.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "Round2", phi2])
         # 在控制台显示两轮测量结果
