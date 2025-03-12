@@ -7,10 +7,12 @@ import time
 TX_IP = "192.108.1.162"
 RX1_IP = "192.108.1.161"
 RX2_IP = "192.108.1.163"
+RX3_IP = "192.108.1.164"
 
 TX_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Tx.py"
 RX1_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Rx1.py"
 RX2_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Rx2.py"
+RX3_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Rx3.py"
 
 def run_remote_script(ip, script_path):
     """
@@ -37,16 +39,19 @@ def main():
     tx_thread = threading.Thread(target=run_remote_script, args=(TX_IP, TX_SCRIPT_PATH))
     rx1_thread = threading.Thread(target=run_remote_script, args=(RX1_IP, RX1_SCRIPT_PATH))
     rx2_thread = threading.Thread(target=run_remote_script, args=(RX2_IP, RX2_SCRIPT_PATH))
+    rx3_thread = threading.Thread(target=run_remote_script, args=(RX3_IP, RX3_SCRIPT_PATH))
 
     # 同时启动三个线程
     tx_thread.start()
     rx1_thread.start()
     rx2_thread.start()
+    rx3_thread.start()
 
     # 等待所有线程结束
     tx_thread.join()
     rx1_thread.join()
     rx2_thread.join()
+    rx3_thread.join()
 
     print("协调控制脚本运行结束，实验已完成。")
 
