@@ -300,7 +300,10 @@ def setup(usrp, server_ip, connect=False):
 # ---------------------------
 def main():
     global file_name_state, file_name
-    file_name = "data_offline"
+    save_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data"))
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+    file_name = os.path.join(save_dir, "data_offline")
     results_filename = "measurement_resultsRX2.txt"
     all_results = []
     try:
