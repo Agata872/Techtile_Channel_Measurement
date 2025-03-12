@@ -16,7 +16,7 @@ if len(sys.argv) > 1:
     num_subscribers = int(sys.argv[2])
 else:
     delay = 10
-    num_subscribers = 1
+    num_subscribers = 4
 
 host = "*"
 sync_port = "5557"
@@ -54,7 +54,11 @@ new_msg_received = 0
 WAIT_TIMEOUT = 60.0*10.0
 
 print(f"Starting experiment: {unique_id}")
-output_path = f"../data/exp-{unique_id}.yml"
+# 确保 data 文件夹存在
+data_dir = os.path.join(script_dir, "..", "data")
+os.makedirs(data_dir, exist_ok=True)
+output_path = os.path.join(data_dir, f"exp-{unique_id}.yml")
+
 with open(output_path, "w") as f:
     f.write(f"experiment: {unique_id}\n")
     f.write(f"num_subscribers: {num_subscribers}\n")
