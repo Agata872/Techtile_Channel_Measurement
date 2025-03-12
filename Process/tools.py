@@ -29,7 +29,7 @@ def to_min_pi_plus_pi(angles, deg=True):
 
     angles = np.asarray(angles)
 
-    thr = 180.0 if deg else np.pi / 2
+    thr = 180.0 if deg else np.pi
     rotate = 360.0 if deg else 2 * np.pi
 
     # ensure positive
@@ -74,13 +74,15 @@ def apply_bandpass(x: np.ndarray, fs=250e3):
     return y_re + 1j * y_imag
 
 
-def get_phases_and_apply_bandpass(x: np.ndarray, fs=250e3):
+def get_phases_and_apply_bandpass(x: np.ndarray, fs=250e3, deg=True):
     sos = butter_bandpass(lowcut, highcut, fs, order=9)
-
     y_re = butter_bandpass_filter(np.real(x), lowcut, highcut, fs, order=9, sos=sos)
     y_imag = butter_bandpass_filter(np.imag(x), lowcut, highcut, fs, order=9, sos=sos)
+    phase = np.angle(y_re + 1j * y_imag)
+    if deg:
+        phase = np.rad2deg(phase)
+    return phase, 0  # legacy
 
-    return np.angle(y_re + 1j * y_imag), 0  # legacy
 
 
 def get_phases_and_remove_CFO(x, fs=250e3, remove_first_samples=True):
