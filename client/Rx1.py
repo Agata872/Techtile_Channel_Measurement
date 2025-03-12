@@ -326,7 +326,7 @@ def main():
         current_time = usrp.get_time_now().get_real_secs()
         start_time_val = current_time + 0.2  # 小延时确保同步
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        file_name_state = f"{file_name}_pilot_round1_{timestamp}"
+        file_name_state = f"{file_name}_{HOSTNAME}_pilot_round1_{timestamp}"
         logger.info("Scheduled first RX start time: %.6f", start_time_val)
         measure_pilot(usrp, rx_streamer, quit_event, result_queue, at_time=start_time_val)
         phi1 = result_queue.get()
@@ -340,7 +340,7 @@ def main():
         # 第二轮测量：设置启动时间为当前时间稍后（0.2秒后），并保存为 round2 文件
         start_time_val = usrp.get_time_now().get_real_secs() + 0.2
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        file_name_state = f"{file_name}_pilot_round2_{timestamp}"
+        file_name_state = f"{file_name}_{HOSTNAME}_pilot_round2_{timestamp}"
         logger.info("Scheduled second RX start time: %.6f", start_time_val)
         measure_pilot(usrp, rx_streamer, quit_event, result_queue, at_time=start_time_val)
         phi2 = result_queue.get()

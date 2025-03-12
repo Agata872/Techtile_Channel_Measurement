@@ -15,14 +15,14 @@ import queue
 import tools
 
 # 全局常量（默认值可被 cal-settings.yml 中的配置覆盖）
-CMD_DELAY = 0.05  # 命令间延时 50ms
-RX_TX_SAME_CHANNEL = True  # 若环回由同一通道进行
-CLOCK_TIMEOUT = 1000  # 外部时钟锁定超时（ms）
-INIT_DELAY = 0.2  # 发射前延时 200ms
+CMD_DELAY = 0.05               # 命令间延时 50ms
+RX_TX_SAME_CHANNEL = True      # 若环回由同一通道进行
+CLOCK_TIMEOUT = 1000           # 外部时钟锁定超时（ms）
+INIT_DELAY = 0.2               # 发射前延时 200ms
 RATE = 250e3
-LOOPBACK_TX_GAIN = 70  # 发射增益（经验值）
-RX_GAIN = 22  # 接收增益（经验值）
-CAPTURE_TIME = 10  # 发射（或测量）时长，单位秒
+LOOPBACK_TX_GAIN = 70          # 发射增益（经验值）
+RX_GAIN = 22                 # 接收增益（经验值）
+CAPTURE_TIME = 10              # 发射（或测量）时长，单位秒
 FREQ = 0
 meas_id = 0
 exp_id = 0
@@ -38,13 +38,12 @@ iq_socket.bind(f"tcp://*:{50001}")
 
 HOSTNAME = socket.gethostname()[4:]
 file_open = False
-server_ip = None  # 此处不使用服务器
+server_ip = None  # 此处暂不使用
 
 # 读取 cal-settings.yml 配置文件（如有）
 with open(os.path.join(os.path.dirname(__file__), "cal-settings.yml"), "r") as file:
     vars = yaml.safe_load(file)
     globals().update(vars)  # 更新全局变量
-
 
 # Setup logger with custom timestamp formatting
 class LogFormatter(logging.Formatter):
@@ -60,7 +59,6 @@ class LogFormatter(logging.Formatter):
         else:
             formatted_date = LogFormatter.pp_now()
         return formatted_date
-
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -99,12 +97,10 @@ def setup_clock(usrp, clock_src, num_mboards):
             logger.debug("Clock signals are locked")
     return True
 
-
 def setup_pps(usrp, pps):
     logger.debug("Setting PPS")
     usrp.set_time_source(pps)
     return True
-
 
 def print_tune_result(tune_res):
     logger.debug(
@@ -114,7 +110,6 @@ def print_tune_result(tune_res):
         (tune_res.target_dsp_freq / 1e6),
         (tune_res.actual_dsp_freq / 1e6),
     )
-
 
 def tune_usrp(usrp, freq, channels, at_time):
     treq = uhd.types.TuneRequest(freq)
@@ -146,12 +141,10 @@ def tune_usrp(usrp, freq, channels, at_time):
         time.sleep(0.01)
     logger.info("TX LO is locked")
 
-
 def setup(usrp, server_ip, connect=False):
     rate = RATE
     mcr = 20e6
-    assert (
-                mcr / rate).is_integer(), f"The masterclock rate {mcr} should be an integer multiple of the sampling rate {rate}"
+    assert (mcr / rate).is_integer(), f"The masterclock rate {mcr} should be an integer multiple of the sampling rate {rate}"
     usrp.set_master_clock_rate(mcr)
     channels = [0, 1]
     setup_clock(usrp, "external", usrp.get_num_mboards())
@@ -181,7 +174,6 @@ def setup(usrp, server_ip, connect=False):
     tune_usrp(usrp, FREQ, channels, at_time=INIT_DELAY)
     logger.info(f"USRP tuned and setup. (Current time: {usrp.get_time_now().get_real_secs()})")
     return tx_streamer, rx_streamer
-
 
 # -------------------------------
 # 发射相关函数：tx_ref、tx_thread、tx_meta_thread
@@ -213,13 +205,11 @@ def tx_ref(usrp, tx_streamer, quit_event, phase, amplitude, start_time=None):
         tx_streamer.send(np.zeros((num_channels, 0), dtype=np.complex64), tx_md)
         logger.info("TX finished.")
 
-
 def tx_thread(usrp, tx_streamer, quit_event, phase=[0, 0], amplitude=[0.8, 0.8], start_time=None):
     tx_thr = threading.Thread(target=tx_ref, args=(usrp, tx_streamer, quit_event, phase, amplitude, start_time))
     tx_thr.setName("TX_thread")
     tx_thr.start()
     return tx_thr
-
 
 def tx_async_th(tx_streamer, quit_event):
     async_metadata = uhd.types.TXAsyncMetadata()
@@ -233,24 +223,20 @@ def tx_async_th(tx_streamer, quit_event):
     except KeyboardInterrupt:
         pass
 
-
 def tx_meta_thread(tx_streamer, quit_event):
     tx_meta_thr = threading.Thread(target=tx_async_th, args=(tx_streamer, quit_event))
     tx_meta_thr.setName("TX_META_thread")
     tx_meta_thr.start()
     return tx_meta_thr
 
-
 def delta(usrp, at_time):
     return at_time - usrp.get_time_now().get_real_secs()
-
 
 def get_current_time(usrp):
     return usrp.get_time_now().get_real_secs()
 
-
 # -------------------------------
-# 主程序：仅进行发射任务
+# 主程序：执行发射任务（同步控制后启动）
 # -------------------------------
 def main():
     try:
@@ -260,16 +246,40 @@ def main():
 
         # 完成硬件设置、同步与调谐，获得 TX 与 RX streamer
         tx_streamer, rx_streamer = setup(usrp, server_ip, connect=False)
-
         quit_event = threading.Event()
 
-        # 设定发射启动时间（例如当前时间后 5 秒）
+        # =========================
+        # 新增：与同步服务器进行通信
+        # =========================
+        # 请将下面的 IP 修改为你的同步服务器实际IP地址
+        sync_server_ip = "192.108.1.148"
+        sync_context = zmq.Context()
+        # 建立 REQ socket 与服务器的 alive 端口（5558）通信
+        alive_client = sync_context.socket(zmq.REQ)
+        alive_client.connect(f"tcp://{sync_server_ip}:5558")
+        alive_message = f"{HOSTNAME} TX alive"
+        logger.info("Sending alive message to sync server: %s", alive_message)
+        alive_client.send_string(alive_message)
+        reply = alive_client.recv_string()
+        logger.info("Received alive reply from sync server: %s", reply)
+
+        # 建立 SUB socket 监听同步消息（5557 端口）
+        sync_subscriber = sync_context.socket(zmq.SUB)
+        sync_subscriber.connect(f"tcp://{sync_server_ip}:5557")
+        sync_subscriber.setsockopt_string(zmq.SUBSCRIBE, "")
+        logger.info("Waiting for SYNC message from sync server...")
+        sync_msg = sync_subscriber.recv_string()
+        logger.info("Received SYNC message: %s", sync_msg)
+        # =========================
+
+        # 同步后，根据当前时间调度 TX 发射
         current_time = get_current_time(usrp)
-        start_time_val = current_time + 5.0
+        # 此处可设置一个短延时（例如 0.2 秒）确保配置完成后开始发射
+        start_time_val = current_time + 0.2
         start_time_spec = uhd.types.TimeSpec(start_time_val)
         logger.info("Scheduled TX start time: %.6f", start_time_val)
 
-        # 启动 TX 发射线程：此处信号参数设为幅度 0.8，相位 0.0（两个通道）
+        # 启动 TX 发射线程：此处信号参数设为幅度 1.0，相位 0.0（两个通道）
         tx_thr = tx_thread(usrp, tx_streamer, quit_event, phase=[0.0, 0.0], amplitude=[1.0, 1.0],
                            start_time=start_time_spec)
         # 同时启动 TX 异步元数据监控线程
@@ -288,7 +298,6 @@ def main():
     finally:
         time.sleep(1)
         sys.exit(0)
-
 
 if __name__ == "__main__":
     main()
