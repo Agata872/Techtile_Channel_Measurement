@@ -3,6 +3,10 @@ import subprocess
 import threading
 import time
 
+
+# Todo: 首先应该将本地密钥文件推送到远程RPIs上以避免每次输入密码
+
+
 # 定义设备 IP 地址与远程脚本路径
 TX_IP = "192.108.1.162"
 RX1_IP = "192.108.1.161"
