@@ -1,6 +1,6 @@
 ---
 - name: 在 ceiling 上拉取 GitHub 仓库代码
-  hosts: ceiling
+  hosts: T03, T04
   become: yes  # 如果需要以 root 权限执行，否则可以去掉
   tasks:
     - name: 克隆 GitHub 仓库
