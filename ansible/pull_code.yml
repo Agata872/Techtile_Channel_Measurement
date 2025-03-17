@@ -1,9 +1,9 @@
 ---
-- name: 在 T01、T02、T03 上拉取 GitHub 仓库代码
-  hosts: T03, T04
+- name: 在 ceiling 上拉取 GitHub 仓库代码
+  hosts: ceiling
   become: yes  # 如果需要以 root 权限执行，否则可以去掉
   tasks:
-    - name: 拉取 GitHub 仓库代码
+    - name: 克隆 GitHub 仓库
       git:
         repo: 'https://github.com/Agata872/Techtile_Channel_Measurement.git'
         dest: /home/pi/Techtile_Channel_Measurement
