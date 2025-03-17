@@ -7,5 +7,5 @@
       git:
         repo: 'https://github.com/Agata872/Techtile_Channel_Measurement.git'
         dest: /home/pi/Techtile_Channel_Measurement
-        version: server  # 或者你需要的分支/标签/commit
+        version: master  # 或者你需要的分支/标签/commit
         force: yes     # 如果需要强制更新代码
