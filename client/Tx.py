@@ -252,7 +252,7 @@ def main():
         # 新增：与同步服务器进行通信
         # =========================
         # 请将下面的 IP 修改为你的同步服务器实际IP地址
-        sync_server_ip = "192.108.1.148"
+        sync_server_ip = "192.108.1.146"
         sync_context = zmq.Context()
         # 建立 REQ socket 与服务器的 alive 端口（5558）通信
         alive_client = sync_context.socket(zmq.REQ)
