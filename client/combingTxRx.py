@@ -14,9 +14,9 @@ RX2_IP = "192.108.1.163"
 RX3_IP = "192.108.1.164"
 
 TX_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Tx.py"
-RX1_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Rx1.py"
-RX2_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Rx1.py"
-RX3_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Rx1.py"
+RX1_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Rx.py"
+RX2_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Rx.py"
+RX3_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Rx.py"
 
 def run_remote_script(ip, script_path):
     """
