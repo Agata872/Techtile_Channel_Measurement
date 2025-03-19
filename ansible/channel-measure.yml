@@ -1,0 +1,42 @@
+- name: Start ZMQ Sync and Run USRP Scripts
+  hosts: all
+  gather_facts: no
+  serial: 1
+  environment:
+    PYTHONPATH: "/usr/local/lib/python3/dist-packages"
+    UHD_IMAGES_DIR: "/usr/share/uhd/images"
+  vars_files:
+    - vars.yml  # 变量文件，可能包含 sync_server_ip
+
+  tasks:
+    # 1. 确保所有设备的代码最新
+    - name: Reset GIT repository
+      shell: "git fetch origin && git reset --hard origin/main && git pull"
+      args:
+        chdir: ~/Techtile_Channel_Measurement/
+
+    # 2. 终止旧的 ZMQ 服务器和客户端进程
+    - name: Kill old ZMQ and Python processes
+      shell: "ps aux | grep -E 'sync_server.py|Tx.py|Rx.py' | grep -v grep | awk '{print $2}' | xargs -r kill -9"
+      ignore_errors: yes
+
+    # 3. 启动 `sync_server.py` 在 SyncServer 设备 (Techtile)
+    - name: Start sync_server.py on Sync Server
+      shell: "nohup python3 sync-server.py 5 3 > sync_server_log.txt 2>&1 &"
+      args:
+        chdir: ~/Techtile_Channel_Measurement/ansible/
+      when: inventory_hostname == "Techtile"
+
+    # 4. 启动 `Tx.py` 在 T10 设备
+    - name: Start Tx.py on T10 (Transmitter)
+      shell: "nohup python3 Tx.py > tx_log.txt 2>&1 &"
+      args:
+        chdir: ~/Techtile_Channel_Measurement/client/
+      when: inventory_hostname == "T10"
+
+    # 5. 启动 `Rx.py` 在 T03, T04 设备
+    - name: Start Rx.py on T03 and T04 (Receivers)
+      shell: "nohup python3 Rx.py > rx_log.txt 2>&1 &"
+      args:
+        chdir: ~/Techtile_Channel_Measurement/client/
+      when: inventory_hostname in ["T03", "T04"]
