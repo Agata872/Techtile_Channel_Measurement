@@ -1,5 +1,6 @@
 - name: Start ZMQ Sync and Run USRP Scripts
   hosts: Server,T10,T03,T04  # 只对这些设备执行 Playbook
+  become: yes
   gather_facts: no
   serial: 1
   environment:
