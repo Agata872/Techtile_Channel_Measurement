@@ -20,12 +20,12 @@
       shell: "ps aux | grep -E 'sync_server.py|Tx.py|Rx.py' | grep -v grep | awk '{print $2}' | xargs -r kill -9"
       ignore_errors: yes
 
-    # 3. 启动 `sync_server.py` 在 Server（你的笔记本）
-    - name: Start sync_server.py on Server
+    # 3. 启动 `sync_server.py` 在你的笔记本（IP 192.108.1.147）
+    - name: Start sync_server.py on Server (192.108.1.147)
       shell: "nohup python3 sync-server.py 5 3 > sync_server_log.txt 2>&1 &"
       args:
         chdir: ~/Techtile_Channel_Measurement/ansible/
-      when: inventory_hostname in groups['server']
+      when: ansible_host == "192.108.1.147"
 
     # 4. 启动 `Tx.py` 在 T10 设备
     - name: Start Tx.py on T10 (Transmitter)
