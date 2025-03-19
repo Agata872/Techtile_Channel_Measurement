@@ -1,5 +1,5 @@
 - name: Start ZMQ Sync and Run USRP Scripts
-  hosts: Server,T10,T03,T04
+  hosts: server,T10,T03,T04
   become: yes
   serial: 0
   environment:
