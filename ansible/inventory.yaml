@@ -650,7 +650,7 @@ all:
       vars:
         ansible_user: techtile
       hosts:
-        Techtile:
+        server:
           ansible_host: 192.108.1.147
     tests:
       hosts:
