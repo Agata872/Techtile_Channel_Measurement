@@ -1,8 +1,7 @@
 - name: Start ZMQ Sync and Run USRP Scripts
-  hosts: Server,T10,T03,T04  # 只对这些设备执行 Playbook
+  hosts: Server,T10,T03,T04
   become: yes
-  gather_facts: no
-  serial: 1
+  serial: 0
   environment:
     PYTHONPATH: "/usr/local/lib/python3/dist-packages"
     UHD_IMAGES_DIR: "/usr/share/uhd/images"
