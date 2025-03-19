@@ -651,6 +651,7 @@ all:
         ansible_user: haorui
       hosts:
         Techtile:
+          ansible_host: 192.108.1.147
     tests:
       hosts:
         T01:
