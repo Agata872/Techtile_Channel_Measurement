@@ -25,7 +25,7 @@
       shell: "nohup python3 sync-server.py 5 3 > sync_server_log.txt 2>&1 &"
       args:
         chdir: ~/Techtile_Channel_Measurement/ansible/
-      when: inventory_hostname == "Server"
+      when: inventory_hostname == "server"
 
     # 4. 仅在 T10 设备启动 `Tx.py`
     - name: Start Tx.py on T10 (Transmitter)
