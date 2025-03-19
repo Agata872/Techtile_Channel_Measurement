@@ -13,7 +13,9 @@
     - name: Reset GIT repository
       shell: "git fetch origin && git reset --hard origin/master && git pull"
       args:
-        chdir: ~/Techtile_Channel_Measurement/
+        chdir: /home/pi/Techtile_Channel_Measurement/
+      become: yes
+      become_user: pi
 
     # 2. 仅在 Server、T10、T03、T04 设备上终止旧进程
     - name: Kill old ZMQ and Python processes
