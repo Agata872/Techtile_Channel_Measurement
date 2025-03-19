@@ -648,7 +648,7 @@ all:
   children:
     server:
       vars:
-        ansible_user: haorui
+        ansible_user: "{{ lookup('env', 'USER') }}"
       hosts:
         Techtile:
           ansible_host: 192.108.1.147
