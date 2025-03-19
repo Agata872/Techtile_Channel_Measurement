@@ -83,6 +83,8 @@ all:
       ansible_host: rpi-t03.local
     T09:
       ansible_host: rpi-t04.local
+    T10:
+      ansible_host: rpi-t10.local
     G01:
       ansible_host: rpi-g01.local
       midspan: midspan-004
@@ -659,6 +661,7 @@ all:
         T07:
         T08:
         T09:
+        T10:
     multiON:
       hosts:
         A05:
