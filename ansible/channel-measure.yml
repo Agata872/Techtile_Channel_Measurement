@@ -11,7 +11,7 @@
   tasks:
     # 1. 确保所有设备的代码最新
     - name: Reset GIT repository
-      shell: "git fetch origin && git reset --hard origin/main && git pull"
+      shell: "git fetch origin && git reset --hard origin/master && git pull"
       args:
         chdir: ~/Techtile_Channel_Measurement/
 
