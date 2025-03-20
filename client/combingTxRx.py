@@ -24,7 +24,8 @@ def run_remote_script(target, script_path):
     """
     remote_cmd = (
         'cd ~/Techtile_Channel_Measurement/client && '
-        'export PYTHONPATH="/usr/local/lib/python3.11/site-packages:$PYTHONPATH"; '
+        # 'export PYTHONPATH="/usr/local/lib/python3.11/site-packages:$PYTHONPATH"; '
+        'export PYTHONPATH="/usr/local/lib/python3/dist-packages:$PYTHONPATH"; '
         f'python3 {script_path}'
     )
     cmd = ["ssh", target, remote_cmd]
