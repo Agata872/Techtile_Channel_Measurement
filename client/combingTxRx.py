@@ -83,8 +83,9 @@ def main():
     RX_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Rx.py"
 
     # 分别为 Tx 和 Rx 指定不同的 PYTHONPATH
-    tx_python_path = "/usr/local/lib/python3/site-packages"
+    tx_python_path = "/usr/local/lib/python3/dist-packages"
     rx_python_path = "/usr/local/lib/python3/dist-packages"
+    # rx_python_path = "/usr/local/lib/python3/dist-packages"
 
     # 创建发射端线程
     tx_thread = threading.Thread(
