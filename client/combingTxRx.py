@@ -49,7 +49,7 @@ def main():
     all_hosts = inventory.get("all", {}).get("hosts", {})
 
     # 发射端设为 T10
-    tx_name = "T10"
+    tx_name = "T03"
     if tx_name not in all_hosts:
         print("未找到 T10 主机信息")
         sys.exit(1)
@@ -61,7 +61,7 @@ def main():
     tx_target = f"{global_user}@{tx_ip}" if global_user else tx_ip
 
     # 接收端设为 T03 和 T04
-    rx_names = ["T03", "T04"]
+    rx_names = ["T04"]
     rx_devices = []
     for name in rx_names:
         if name in all_hosts:
