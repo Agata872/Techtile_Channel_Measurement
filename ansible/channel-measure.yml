@@ -1,80 +1,25 @@
 ---
-# 针对接收端的任务
-- name: Start receiver scripts
-  hosts: receivers
+- name: Run Tx on T10
+  hosts: T10
   gather_facts: no
-  serial: 0            # 如果需要全部并发执行，则保持为0；也可以调整并发数
-  vars_files:
-    - vars.yml        # 如有需要，可在vars.yml中定义相关变量
-  environment:
-    PYTHONPATH: "/usr/local/lib/python3/dist-packages"
-  vars:
-    script_name: "usrp-cal-receiver.sh"   # 假设接收端脚本名
   tasks:
-    - name: Reset GIT to be sure on receivers
-      shell: "git fetch origin && git reset --hard origin/main"
-      args:
-        chdir: ~/experiments/
+    - name: Execute Tx script on T10
+      shell: |
+        cd ~/Techtile_Channel_Measurement/client &&
+        export PYTHONPATH="/usr/local/lib/python3.11/site-packages:$PYTHONPATH" &&
+        python3 Tx.py
+      # 如果你的实验需要等待脚本完成，可去掉 async 和 poll 参数
+      async: 3600
+      poll: 0
 
-    - name: Pull latest code on receivers
-      shell: "git pull"
-      args:
-        chdir: ~/experiments/
-
-    - name: Ensure receiver script is executable
-      ansible.builtin.shell:
-        cmd: "chmod +x {{ script_name }}"
-      args:
-        chdir: ~/experiments/02_reciprocity_based_WPT/receiver_client
-
-    - name: Remove Windows line endings in receiver script
-      ansible.builtin.shell:
-        cmd: "sed -i -e 's/\\r$//' {{ script_name }}"
-      args:
-        chdir: ~/experiments/02_reciprocity_based_WPT/receiver_client
-
-    - name: Run receiver script in background
-      ansible.builtin.shell:
-        cmd: "nohup ./{{ script_name }} --option 参数 > log.txt 2>&1 &"
-        chdir: ~/experiments/02_reciprocity_based_WPT/receiver_client
-        executable: /bin/bash
-
-# 针对发射端的任务
-- name: Start transmitter script
-  hosts: transmitter
+- name: Run Rx on T03 and T04
+  hosts: T03,T04
   gather_facts: no
-  vars_files:
-    - vars.yml
-  environment:
-    PYTHONPATH: "/usr/local/lib/python3/dist-packages"
-  vars:
-    script_name: "usrp-cal-transmitter.sh"   # 假设发射端脚本名
   tasks:
-    - name: Reset GIT to be sure on transmitter
-      shell: "git fetch origin && git reset --hard origin/main"
-      args:
-        chdir: ~/experiments/
-
-    - name: Pull latest code on transmitter
-      shell: "git pull"
-      args:
-        chdir: ~/experiments/
-
-    - name: Ensure transmitter script is executable
-      ansible.builtin.shell:
-        cmd: "chmod +x {{ script_name }}"
-      args:
-        chdir: ~/experiments/02_reciprocity_based_WPT/transmitter_client
-
-    - name: Remove Windows line endings in transmitter script
-      ansible.builtin.shell:
-        cmd: "sed -i -e 's/\\r$//' {{ script_name }}"
-      args:
-        chdir: ~/experiments/02_reciprocity_based_WPT/transmitter_client
-
-    - name: Run transmitter script in background
-      ansible.builtin.shell:
-        cmd: "nohup ./{{ script_name }} --ip {{ server_ip }} > log.txt 2>&1 &"
-        args:
-          chdir: ~/experiments/02_reciprocity_based_WPT/transmitter_client
-          executable: /bin/bash
+    - name: Execute Rx script on receivers
+      shell: |
+        cd ~/Techtile_Channel_Measurement/client &&
+        export PYTHONPATH="/usr/local/lib/python3/dist-packages:$PYTHONPATH" &&
+        python3 Rx.py
+      async: 3600
+      poll: 0
