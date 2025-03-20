@@ -1,7 +1,7 @@
 ---
 all:
   vars:
-    ansible_user: dramco_tianzheng
+    ansible_user: pi
     ansible_python_interpreter: /usr/bin/python3
     midspans:
       midspan-001:
