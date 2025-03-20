@@ -21,8 +21,8 @@ def load_inventory(inventory_file):
 def run_remote_script(ip, script_path):
     """
     通过 SSH 在远程设备上执行指定脚本，
-    在命令中先切换到脚本目录并导出必要的环境变量，
-    确保非交互式 Shell 下能正确找到 uhd 模块和固件。
+    切换到脚本目录并设置必要环境变量，
+    远程执行 Tx.py 或 Rx.py 脚本（脚本内部已处理线程管理）。
     """
     remote_cmd = (
         'cd ~/Techtile_Channel_Measurement/client && '
@@ -40,72 +40,67 @@ def run_remote_script(ip, script_path):
 
 
 def main():
-    # 指定 inventory 文件路径（如有需要，可通过命令行参数传入）
+    # 指定 inventory 文件路径
     inventory_file = "inventory.yaml"
     inventory = load_inventory(inventory_file)
 
-    # 从 all.hosts 获取所有设备信息
+    # 从 all.hosts 中提取设备信息
     all_hosts = inventory.get("all", {}).get("hosts", {})
 
-    # 设定发射端为 T10
-    if "T10" not in all_hosts:
+    # 发射端设为 T10
+    tx_name = "T10"
+    if tx_name not in all_hosts:
         print("未找到 T10 主机信息")
         sys.exit(1)
-    tx_info = all_hosts["T10"]
+    tx_info = all_hosts[tx_name]
     tx_ip = tx_info.get("ansible_host")
     if not tx_ip:
         print("T10 主机缺少 ansible_host 属性")
         sys.exit(1)
 
-    # 从 children.ceiling 获取接收端列表（注意 ceiling 下的 hosts 节点只列出主机名）
-    children = inventory.get("all", {}).get("children", {})
-    ceiling_group = children.get("ceiling", {})
-    # ceiling_hosts = ceiling_group.get("hosts", {})
-    ceiling_hosts = all_hosts["T03, T04"]
+    # 接收端设为 T03 和 T04
+    rx_names = ["T03", "T04"]
     rx_devices = []
-    for host in ceiling_hosts.keys():
-        if host in all_hosts:
-            host_ip = all_hosts[host].get("ansible_host")
+    for name in rx_names:
+        if name in all_hosts:
+            host_ip = all_hosts[name].get("ansible_host")
             if host_ip:
-                rx_devices.append((host, host_ip))
+                rx_devices.append((name, host_ip))
+            else:
+                print(f"{name} 主机缺少 ansible_host 属性")
         else:
-            print(f"在 all.hosts 中未找到 {host} 的详细信息")
+            print(f"未找到主机 {name}")
 
     if not rx_devices:
-        print("未找到 ceiling 组的接收端设备")
+        print("未找到接收端设备")
         sys.exit(1)
 
-    # 定义远程脚本路径
+    # 定义远程脚本路径（Tx.py 与 Rx.py 脚本中已包含线程管理）
     TX_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Tx.py"
     RX_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Rx.py"
 
     # 创建发射端线程
-    tx_thread = threading.Thread(target=run_remote_script, args=(tx_ip, TX_SCRIPT_PATH))
+    tx_thread = threading.Thread(target=run_remote_script, args=(tx_ip, TX_SCRIPT_PATH), name="TX_Thread")
 
     # 为每个接收端设备创建线程
     rx_threads = []
-    for host, ip in rx_devices:
-        t = threading.Thread(target=run_remote_script, args=(ip, RX_SCRIPT_PATH))
-        rx_threads.append(t)
+    for name, ip in rx_devices:
+        thread = threading.Thread(target=run_remote_script, args=(ip, RX_SCRIPT_PATH), name=f"RX_Thread_{name}")
+        rx_threads.append(thread)
 
-    # 同时启动发射端与所有接收端的线程
-    print(f"启动发射端 T10 ({tx_ip})...")
+    print(f"启动发射端 {tx_name} ({tx_ip}) ...")
     tx_thread.start()
-    for host, ip in rx_devices:
-        print(f"启动接收端 {host} ({ip})...")
-        # 启动接收端线程
-        for t in rx_threads:
-            t.start()
-        break  # 注意：此处避免重复启动，实际启动全部接收端线程的代码见下面
 
-    # 正式启动所有接收端线程
-    for t in rx_threads:
-        t.start()
+    for name, ip in rx_devices:
+        print(f"启动接收端 {name} ({ip}) ...")
+
+    for thread in rx_threads:
+        thread.start()
 
     # 等待所有线程结束
     tx_thread.join()
-    for t in rx_threads:
-        t.join()
+    for thread in rx_threads:
+        thread.join()
 
     print("协调控制脚本运行结束，实验已完成。")
 
