@@ -75,14 +75,6 @@ all:
       ansible_host: rpi-t03.local
     T04:
       ansible_host: rpi-t04.local
-    T06:
-      ansible_host: rpi-t01.local
-    T07:
-      ansible_host: rpi-t02.local
-    T08:
-      ansible_host: rpi-t03.local
-    T09:
-      ansible_host: rpi-t04.local
     T10:
       ansible_host: rpi-t10.local
     G01:
@@ -648,20 +640,15 @@ all:
   children:
     server:
       vars:
-        ansible_user: techtile
+        ansible_user: haorui
       hosts:
-        server:
-          ansible_host: 192.108.1.147
+        Techtile:
     tests:
       hosts:
         T01:
         T02:
         T03:
         T04:
-        T06:
-        T07:
-        T08:
-        T09:
         T10:
     multiON:
       hosts:
@@ -1005,4 +992,3 @@ all:
       children:
         wallEast:
         wallWest:
-
