@@ -61,7 +61,7 @@ def main():
     children = inventory.get("all", {}).get("children", {})
     ceiling_group = children.get("ceiling", {})
     # ceiling_hosts = ceiling_group.get("hosts", {})
-    ceiling_hosts = all_hosts["T3, T4"]
+    ceiling_hosts = all_hosts["T03, T04"]
     rx_devices = []
     for host in ceiling_hosts.keys():
         if host in all_hosts:
