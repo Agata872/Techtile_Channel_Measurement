@@ -16,16 +16,15 @@ def load_inventory(inventory_file):
         sys.exit(1)
 
 
-def run_remote_script(target, script_path):
+def run_remote_script(target, script_path, python_path):
     """
     通过 SSH 在远程设备上执行指定脚本，
-    切换到脚本目录并设置必要环境变量，
+    切换到脚本目录并设置指定的 PYTHONPATH，
     远程执行 Tx.py 或 Rx.py 脚本（脚本内部已处理线程管理）。
     """
     remote_cmd = (
-        'cd ~/Techtile_Channel_Measurement/client && '
-        # 'export PYTHONPATH="/usr/local/lib/python3.11/site-packages:$PYTHONPATH"; '
-        'export PYTHONPATH="/usr/local/lib/python3/dist-packages:$PYTHONPATH"; '
+        f'cd ~/Techtile_Channel_Measurement/client && '
+        f'export PYTHONPATH="{python_path}:$PYTHONPATH"; '
         f'python3 {script_path}'
     )
     cmd = ["ssh", target, remote_cmd]
@@ -43,7 +42,7 @@ def main():
     inventory_file = "inventory.yaml"
     inventory = load_inventory(inventory_file)
 
-    # 从 inventory 中获取全局用户名（这里为 pi）
+    # 从 inventory 中获取全局用户名（假设全局 ansible_user 为 pi）
     global_user = inventory.get("all", {}).get("vars", {}).get("ansible_user", "")
 
     # 从 all.hosts 中提取设备信息
@@ -79,24 +78,37 @@ def main():
         print("未找到接收端设备")
         sys.exit(1)
 
-    # 定义远程脚本路径（Tx.py 与 Rx.py 脚本内部已管理各自线程）
+    # 定义远程脚本路径
     TX_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Tx.py"
     RX_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Rx.py"
 
+    # 分别为 Tx 和 Rx 指定不同的 PYTHONPATH
+    tx_python_path = "/usr/local/lib/python3.11/site-packages"
+    rx_python_path = "/usr/local/lib/python3/dist-packages"
+
     # 创建发射端线程
-    tx_thread = threading.Thread(target=run_remote_script, args=(tx_target, TX_SCRIPT_PATH), name="TX_Thread")
+    tx_thread = threading.Thread(
+        target=run_remote_script,
+        args=(tx_target, TX_SCRIPT_PATH, tx_python_path),
+        name="TX_Thread"
+    )
 
     # 为每个接收端设备创建线程
     rx_threads = []
     for name, target in rx_devices:
-        rx_threads.append(
-            threading.Thread(target=run_remote_script, args=(target, RX_SCRIPT_PATH), name=f"RX_Thread_{name}"))
+        thread = threading.Thread(
+            target=run_remote_script,
+            args=(target, RX_SCRIPT_PATH, rx_python_path),
+            name=f"RX_Thread_{name}"
+        )
+        rx_threads.append(thread)
 
     print(f"启动发射端 {tx_name} ({tx_target}) ...")
     tx_thread.start()
 
     for name, target in rx_devices:
         print(f"启动接收端 {name} ({target}) ...")
+
     for thread in rx_threads:
         thread.start()
 
