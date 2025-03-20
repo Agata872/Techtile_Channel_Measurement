@@ -1,7 +1,7 @@
 ---
 all:
   vars:
-    ansible_user: pi
+    ansible_user: dramco_tianzheng
     ansible_python_interpreter: /usr/bin/python3
     midspans:
       midspan-001:
@@ -75,6 +75,10 @@ all:
       ansible_host: rpi-t03.local
     T04:
       ansible_host: rpi-t04.local
+    T06:
+      ansible_host: rpi-t06.local
+    T07:
+      ansible_host: rpi-t07.local
     T10:
       ansible_host: rpi-t10.local
     G01:
@@ -649,6 +653,8 @@ all:
         T02:
         T03:
         T04:
+        T06:
+        T07:
         T10:
     multiON:
       hosts:

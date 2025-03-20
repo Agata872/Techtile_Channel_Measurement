@@ -1,25 +1,31 @@
 ---
 - name: Run Tx on T10
-  hosts: T10
+  hosts: T06
   gather_facts: no
   tasks:
-    - name: Execute Tx script on T10
+    - name: Execute Tx.py on T10
       shell: |
         cd ~/Techtile_Channel_Measurement/client &&
         export PYTHONPATH="/usr/local/lib/python3.11/site-packages:$PYTHONPATH" &&
         python3 Tx.py
-      # 如果你的实验需要等待脚本完成，可去掉 async 和 poll 参数
       async: 3600
       poll: 0
 
 - name: Run Rx on T03 and T04
-  hosts: T03,T04
+  hosts: T07
   gather_facts: no
   tasks:
-    - name: Execute Rx script on receivers
+    - name: Ensure data directory exists
+      file:
+        path: ~/Techtile_Channel_Measurement/data
+        state: directory
+        mode: '0755'
+    - name: Execute Rx.py on receivers
       shell: |
         cd ~/Techtile_Channel_Measurement/client &&
-        export PYTHONPATH="/usr/local/lib/python3/dist-packages:$PYTHONPATH" &&
+#        export PYTHONPATH="/usr/local/lib/python3/dist-packages:$PYTHONPATH" &&
+#        python3 Rx.py
+        export PYTHONPATH="/usr/local/lib/python3.11/site-packages:$PYTHONPATH" &&
         python3 Rx.py
       async: 3600
       poll: 0
