@@ -16,14 +16,13 @@ def load_inventory(inventory_file):
         sys.exit(1)
 
 
-def run_remote_script(target, script_path, python_path):
+def run_remote_script(target, script_path, python_path, pre_cmd=""):
     """
     通过 SSH 在远程设备上执行指定脚本，
-    切换到脚本目录并设置指定的 PYTHONPATH，
-    远程执行 Tx.py 或 Rx.py 脚本（脚本内部已处理线程管理）。
+    可选 pre_cmd 用于在执行脚本前运行其它命令（例如创建目录）。
     """
     remote_cmd = (
-        f'cd ~/Techtile_Channel_Measurement/client && '
+        f'{pre_cmd}cd ~/Techtile_Channel_Measurement/client && '
         f'export PYTHONPATH="{python_path}:$PYTHONPATH"; '
         f'python3 {script_path}'
     )
@@ -48,19 +47,19 @@ def main():
     # 从 all.hosts 中提取设备信息
     all_hosts = inventory.get("all", {}).get("hosts", {})
 
-    # 发射端设为 T10
+    # 例如发射端设为 T03（这里示例中改为 T03，实际请根据需要设置）
     tx_name = "T03"
     if tx_name not in all_hosts:
-        print("未找到 T10 主机信息")
+        print(f"未找到 {tx_name} 主机信息")
         sys.exit(1)
     tx_info = all_hosts[tx_name]
     tx_ip = tx_info.get("ansible_host")
     if not tx_ip:
-        print("T10 主机缺少 ansible_host 属性")
+        print(f"{tx_name} 主机缺少 ansible_host 属性")
         sys.exit(1)
     tx_target = f"{global_user}@{tx_ip}" if global_user else tx_ip
 
-    # 接收端设为 T03 和 T04
+    # 接收端设为 T04（示例中只有一个接收端）
     rx_names = ["T04"]
     rx_devices = []
     for name in rx_names:
@@ -87,6 +86,9 @@ def main():
     rx_python_path = "/usr/local/lib/python3/dist-packages"
     # rx_python_path = "/usr/local/lib/python3/dist-packages"
 
+    # 对于 Rx 设备，我们在运行脚本前先创建 data 目录
+    rx_pre_cmd = 'mkdir -p ~/Techtile_Channel_Measurement/data && '
+
     # 创建发射端线程
     tx_thread = threading.Thread(
         target=run_remote_script,
@@ -94,12 +96,12 @@ def main():
         name="TX_Thread"
     )
 
-    # 为每个接收端设备创建线程
+    # 为每个接收端设备创建线程（预先创建 data 目录）
     rx_threads = []
     for name, target in rx_devices:
         thread = threading.Thread(
             target=run_remote_script,
-            args=(target, RX_SCRIPT_PATH, rx_python_path),
+            args=(target, RX_SCRIPT_PATH, rx_python_path, rx_pre_cmd),
             name=f"RX_Thread_{name}"
         )
         rx_threads.append(thread)
