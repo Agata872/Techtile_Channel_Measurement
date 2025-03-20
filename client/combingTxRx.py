@@ -60,7 +60,8 @@ def main():
     # 从 children.ceiling 获取接收端列表（注意 ceiling 下的 hosts 节点只列出主机名）
     children = inventory.get("all", {}).get("children", {})
     ceiling_group = children.get("ceiling", {})
-    ceiling_hosts = ceiling_group.get("hosts", {})
+    # ceiling_hosts = ceiling_group.get("hosts", {})
+    ceiling_hosts = all_hosts["T3, T4"]
     rx_devices = []
     for host in ceiling_hosts.keys():
         if host in all_hosts:
