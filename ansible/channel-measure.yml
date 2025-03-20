@@ -1,44 +1,80 @@
-- name: Start ZMQ Sync and Run USRP Scripts
-  hosts: server,T10,T03,T04
-  become: yes
-  serial: 0
+---
+# 针对接收端的任务
+- name: Start receiver scripts
+  hosts: receivers
+  gather_facts: no
+  serial: 0            # 如果需要全部并发执行，则保持为0；也可以调整并发数
+  vars_files:
+    - vars.yml        # 如有需要，可在vars.yml中定义相关变量
   environment:
     PYTHONPATH: "/usr/local/lib/python3/dist-packages"
-    UHD_IMAGES_DIR: "/usr/share/uhd/images"
-  vars_files:
-    - vars.yml  # 变量文件，可能包含 sync_server_ip
-
+  vars:
+    script_name: "usrp-cal-receiver.sh"   # 假设接收端脚本名
   tasks:
-    # 1. 仅在 Server、T10、T03、T04 设备上同步 Git 代码
-    - name: Reset GIT repository
-      shell: "git fetch origin && git reset --hard origin/master && git pull"
+    - name: Reset GIT to be sure on receivers
+      shell: "git fetch origin && git reset --hard origin/main"
       args:
-        chdir: /home/pi/Techtile_Channel_Measurement/
-      become: yes
-      become_user: pi
+        chdir: ~/experiments/
 
-    # 2. 仅在 Server、T10、T03、T04 设备上终止旧进程
-    - name: Kill old ZMQ and Python processes
-      shell: "ps aux | grep -E 'sync_server.py|Tx.py|Rx.py' | grep -v grep | awk '{print $2}' | xargs -r kill -9"
-      ignore_errors: yes
-
-    # 3. 仅在 Server（你的笔记本）启动 `sync-server.py`
-    - name: Start sync_server.py on Server
-      shell: "nohup python3 sync-server.py 5 3 > sync_server_log.txt 2>&1 &"
+    - name: Pull latest code on receivers
+      shell: "git pull"
       args:
-        chdir: ~/Techtile_Channel_Measurement/ansible/
-      when: inventory_hostname == "server"
+        chdir: ~/experiments/
 
-    # 4. 仅在 T10 设备启动 `Tx.py`
-    - name: Start Tx.py on T10 (Transmitter)
-      shell: "nohup python3 Tx.py > tx_log.txt 2>&1 &"
+    - name: Ensure receiver script is executable
+      ansible.builtin.shell:
+        cmd: "chmod +x {{ script_name }}"
       args:
-        chdir: ~/Techtile_Channel_Measurement/client/
-      when: inventory_hostname == "T10"
+        chdir: ~/experiments/02_reciprocity_based_WPT/receiver_client
 
-    # 5. 仅在 T03, T04 设备启动 `Rx.py`
-    - name: Start Rx.py on T03 and T04 (Receivers)
-      shell: "nohup python3 Rx.py > rx_log.txt 2>&1 &"
+    - name: Remove Windows line endings in receiver script
+      ansible.builtin.shell:
+        cmd: "sed -i -e 's/\\r$//' {{ script_name }}"
       args:
-        chdir: ~/Techtile_Channel_Measurement/client/
-      when: inventory_hostname in ["T03", "T04"]
+        chdir: ~/experiments/02_reciprocity_based_WPT/receiver_client
+
+    - name: Run receiver script in background
+      ansible.builtin.shell:
+        cmd: "nohup ./{{ script_name }} --option 参数 > log.txt 2>&1 &"
+        chdir: ~/experiments/02_reciprocity_based_WPT/receiver_client
+        executable: /bin/bash
+
+# 针对发射端的任务
+- name: Start transmitter script
+  hosts: transmitter
+  gather_facts: no
+  vars_files:
+    - vars.yml
+  environment:
+    PYTHONPATH: "/usr/local/lib/python3/dist-packages"
+  vars:
+    script_name: "usrp-cal-transmitter.sh"   # 假设发射端脚本名
+  tasks:
+    - name: Reset GIT to be sure on transmitter
+      shell: "git fetch origin && git reset --hard origin/main"
+      args:
+        chdir: ~/experiments/
+
+    - name: Pull latest code on transmitter
+      shell: "git pull"
+      args:
+        chdir: ~/experiments/
+
+    - name: Ensure transmitter script is executable
+      ansible.builtin.shell:
+        cmd: "chmod +x {{ script_name }}"
+      args:
+        chdir: ~/experiments/02_reciprocity_based_WPT/transmitter_client
+
+    - name: Remove Windows line endings in transmitter script
+      ansible.builtin.shell:
+        cmd: "sed -i -e 's/\\r$//' {{ script_name }}"
+      args:
+        chdir: ~/experiments/02_reciprocity_based_WPT/transmitter_client
+
+    - name: Run transmitter script in background
+      ansible.builtin.shell:
+        cmd: "nohup ./{{ script_name }} --ip {{ server_ip }} > log.txt 2>&1 &"
+        args:
+          chdir: ~/experiments/02_reciprocity_based_WPT/transmitter_client
+          executable: /bin/bash
