@@ -35,8 +35,13 @@ def main():
     global_user = inventory.get("all", {}).get("vars", {}).get("ansible_user", "pi")
     all_hosts = inventory.get("all", {}).get("hosts", {})
 
-    # 你可以在这里指定多个接收端名称
-    rx_names = ["ceiling"]  # 你也可以加 A06, A07 等
+    # 提取 ceiling 组中的主机名
+    ceiling_group = inventory.get("ceiling", {}).get("hosts", {})
+    rx_names = list(ceiling_group.keys())
+
+    if not rx_names:
+        print("⚠️ 未在 inventory.yaml 中找到 ceiling 组或该组为空")
+        sys.exit(1)
 
     for rx_name in rx_names:
         rx_info = all_hosts.get(rx_name)
