@@ -283,11 +283,11 @@ def setup(usrp, server_ip, connect=False):
 # ---------------------------
 def main():
     global file_name_state, file_name
-    save_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data"))
+    save_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Raw_Data"))
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     file_name = os.path.join(save_dir, "data_offline")
-    results_filename = "measurement_resultsRX1.txt"
+    results_filename = "measurement_resultsRX.txt"
     all_results = []
     try:
         # 初始化 USRP 设备（加载指定 FPGA 固件）
