@@ -16,21 +16,29 @@ def load_inventory(inventory_file):
 
 def run_remote_script(target, script_path):
     """
-    通过 SSH 在远程设备上执行指定脚本，
-    切换到脚本目录并设置必要的 PYTHONPATH 环境变量，
-    最后执行脚本。
+    通过 SSH 在远程设备上执行指定脚本，并实时打印输出。
     """
     remote_cmd = (
         'cd ~/Techtile_Channel_Measurement/client && '
         'export PYTHONPATH="/usr/local/lib/python3/dist-packages:$PYTHONPATH"; '
-        f'python3 {script_path}'
+        f'python3 -u {script_path}'
     )
     cmd = ["ssh", target, remote_cmd]
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
-        print(f"【{target}】脚本输出：\n{result.stdout}")
-        if result.stderr:
-            print(f"【{target}】脚本错误输出：\n{result.stderr}")
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=1)
+
+        # 实时读取标准输出
+        for line in process.stdout:
+            print(f"【{target}】输出: {line}", end='')
+
+        # 等待脚本完成
+        process.wait()
+
+        # 读取标准错误输出
+        stderr_output = process.stderr.read()
+        if stderr_output:
+            print(f"【{target}】错误输出:\n{stderr_output}")
+
     except Exception as e:
         print(f"调用 {target} 上脚本失败: {e}")
 
@@ -41,10 +49,9 @@ def main():
     # 从 inventory 中获取全局用户（应为 "pi"）
     global_user = inventory.get("all", {}).get("vars", {}).get("ansible_user", "pi")
 
-    # 从 inventory 中获取所有主机信息
+    # 获取所有主机信息
     all_hosts = inventory.get("all", {}).get("hosts", {})
 
-    # 设置发射端为 T01，接收端为 A05
     if "T01" not in all_hosts:
         print("未找到 T01 主机信息")
         sys.exit(1)
@@ -65,15 +72,15 @@ def main():
         print("A05 主机缺少 ansible_host 属性")
         sys.exit(1)
 
-    # 构造 SSH 目标地址，例如 "pi@rpi-t01.local" 和 "pi@rpi-a05.local"
+    # 构造 SSH 目标地址
     tx_target = f"{global_user}@{tx_ip}"
     rx_target = f"{global_user}@{rx_ip}"
 
-    # 定义远程脚本路径（请确保 Tx.py 和 Rx.py 路径正确）
+    # 定义远程脚本路径
     TX_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Tx.py"
     RX_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Rx.py"
 
-    # 创建发射端和接收端线程
+    # 创建线程
     tx_thread = threading.Thread(target=run_remote_script, args=(tx_target, TX_SCRIPT_PATH))
     rx_thread = threading.Thread(target=run_remote_script, args=(rx_target, RX_SCRIPT_PATH))
 
