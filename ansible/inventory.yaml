@@ -649,6 +649,7 @@ all:
         Techtile:
     tests:
       hosts:
+        PILOT:
         T01:
         T02:
         T03:
