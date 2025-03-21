@@ -65,20 +65,16 @@ all:
       access_ip: 192.108.0.1
     REF:
       ansible_host: rpi-ref.local
-    T01:
+    PILOT:
       ansible_host: rpi-pilot.local
+    T01:
+      ansible_host: rpi-t01.local
     T02:
       ansible_host: rpi-t02.local
     T03:
       ansible_host: rpi-t03.local
     T04:
       ansible_host: rpi-t04.local
-    T06:
-      ansible_host: rpi-t06.local
-    T07:
-      ansible_host: rpi-t07.local
-    T10:
-      ansible_host: rpi-t10.local
     G01:
       ansible_host: rpi-g01.local
       midspan: midspan-004
@@ -651,9 +647,6 @@ all:
         T02:
         T03:
         T04:
-        T06:
-        T07:
-        T10:
     multiON:
       hosts:
         A05:
