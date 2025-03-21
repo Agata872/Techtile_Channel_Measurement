@@ -13,9 +13,7 @@ def load_inventory(inventory_file):
         sys.exit(1)
 
 def fix_remote_permissions(target):
-    """
-    修改远程设备上 Raw_Data 目录的权限
-    """
+    """在远程主机上执行 chown 命令"""
     remote_cmd = 'sudo chown -R $USER:$USER ~/Techtile_Channel_Measurement/Raw_Data'
     cmd = ["ssh", target, remote_cmd]
     try:
@@ -32,7 +30,9 @@ def main():
 
     global_user = inventory.get("all", {}).get("vars", {}).get("ansible_user", "pi")
     all_hosts = inventory.get("all", {}).get("hosts", {})
-    ceiling_group = inventory.get("ceiling", {}).get("hosts", {})
+
+    # ✅ 正确提取 ceiling 组中的主机名
+    ceiling_group = inventory.get("all", {}).get("children", {}).get("ceiling", {}).get("hosts", {})
 
     if not ceiling_group:
         print("⚠️ 没有找到 ceiling 组或该组为空")
