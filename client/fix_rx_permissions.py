@@ -7,15 +7,14 @@ def load_inventory(inventory_file):
     """加载 inventory.yaml 文件"""
     try:
         with open(inventory_file, "r") as f:
-            inventory = yaml.safe_load(f)
-        return inventory
+            return yaml.safe_load(f)
     except Exception as e:
-        print(f"加载 {inventory_file} 失败: {e}")
+        print(f"❌ 加载 {inventory_file} 失败: {e}")
         sys.exit(1)
 
 def fix_remote_permissions(target):
     """
-    修改远程设备上 Raw_Data 目录的权限，确保当前用户可以写入
+    修改远程设备上 Raw_Data 目录的权限
     """
     remote_cmd = 'sudo chown -R $USER:$USER ~/Techtile_Channel_Measurement/Raw_Data'
     cmd = ["ssh", target, remote_cmd]
@@ -29,33 +28,30 @@ def fix_remote_permissions(target):
         print(f"❌【{target}】连接失败: {e}")
 
 def main():
-    inventory_file = "inventory.yaml"
-    inventory = load_inventory(inventory_file)
+    inventory = load_inventory("inventory.yaml")
 
     global_user = inventory.get("all", {}).get("vars", {}).get("ansible_user", "pi")
     all_hosts = inventory.get("all", {}).get("hosts", {})
-
-    # 提取 ceiling 组中的主机名
     ceiling_group = inventory.get("ceiling", {}).get("hosts", {})
-    rx_names = list(ceiling_group.keys())
 
-    if not rx_names:
-        print("⚠️ 未在 inventory.yaml 中找到 ceiling 组或该组为空")
+    if not ceiling_group:
+        print("⚠️ 没有找到 ceiling 组或该组为空")
         sys.exit(1)
 
-    for rx_name in rx_names:
-        rx_info = all_hosts.get(rx_name)
-        if not rx_info:
-            print(f"⚠️ 未找到 {rx_name} 主机信息，跳过")
-            continue
-        rx_ip = rx_info.get("ansible_host")
-        if not rx_ip:
-            print(f"⚠️ {rx_name} 缺少 ansible_host，跳过")
+    for hostname in ceiling_group:
+        host_info = all_hosts.get(hostname)
+        if not host_info:
+            print(f"⚠️ 未找到主机 {hostname} 的详细信息，跳过")
             continue
 
-        rx_target = f"{global_user}@{rx_ip}"
-        print(f"🔧 正在修复 {rx_name} ({rx_target}) 的 Raw_Data 权限 ...")
-        fix_remote_permissions(rx_target)
+        ansible_host = host_info.get("ansible_host")
+        if not ansible_host:
+            print(f"⚠️ 主机 {hostname} 缺少 ansible_host，跳过")
+            continue
+
+        target = f"{global_user}@{ansible_host}"
+        print(f"🔧 正在修复 {hostname} ({target}) 的 Raw_Data 目录权限 ...")
+        fix_remote_permissions(target)
 
 if __name__ == "__main__":
     main()
