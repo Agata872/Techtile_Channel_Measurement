@@ -60,7 +60,7 @@ def main():
         sys.exit(1)
 
     tx_info = all_hosts["T01"]
-    rx_info = all_hosts["A06"]
+    rx_info = all_hosts["A05","A06"]
 
     tx_ip = tx_info.get("ansible_host")
     rx_ip = rx_info.get("ansible_host")
