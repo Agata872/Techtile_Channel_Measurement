@@ -65,10 +65,8 @@ all:
       access_ip: 192.108.0.1
     REF:
       ansible_host: rpi-ref.local
-    PILOT:
-      ansible_host: rpi-pilot.local
     T01:
-      ansible_host: rpi-t01.local
+      ansible_host: rpi-pilot.local
     T02:
       ansible_host: rpi-t02.local
     T03:
@@ -649,7 +647,6 @@ all:
         Techtile:
     tests:
       hosts:
-        PILOT:
         T01:
         T02:
         T03:
@@ -661,30 +658,6 @@ all:
       hosts:
         A05:
         G10:
-#        G05:
-#        G06:
-#        G07:
-#        G08:
-#        G09:
-#        G10:
-#        T01:
-#        T02:
-#        G01:
-#        G02:
-#        A01:
-#        B01:
-#        C01:
-#        D01:
-#        E01:
-#        F01:
-#        G01:
-#        A11:
-#        B11:
-#        C11:
-#        D11:
-#        E12:
-#        F11:
-#        G11:
     fail:
       hosts:
     wallEast:
