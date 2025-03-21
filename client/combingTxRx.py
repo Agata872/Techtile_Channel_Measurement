@@ -61,7 +61,7 @@ def main():
     tx_target = f"{global_user}@{tx_ip}" if global_user else tx_ip
 
     # 接收端设为 T03 和 T04
-    rx_names = ["PILOT"]
+    rx_names = ["A05"]
     rx_devices = []
     for name in rx_names:
         if name in all_hosts:
