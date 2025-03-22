@@ -287,7 +287,7 @@ def main():
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     file_name = os.path.join(save_dir, "data_offline")
-    results_filename = "measurement_resultsRX.txt"
+    results_filename = os.path.join(save_dir, "measurement_resultsRX.txt")
     all_results = []
     try:
         # 初始化 USRP 设备（加载指定 FPGA 固件）
