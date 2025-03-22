@@ -14,16 +14,17 @@ def load_inventory(inventory_file):
 
 def fix_remote_permissions(target):
     """
-    在远程主机上执行权限修复命令：
-    1. 修复 Raw_Data 文件夹的权限
-    2. 修复 measurement_resultsRX.txt 文件权限（如果存在）
+    修复远程主机 Raw_Data 目录及其中所有相关结果文件权限：
+    - 包括 .txt, .csv, .npy 等文件
     """
+    base_path = "~/Techtile_Channel_Measurement/Raw_Data"
+
     remote_cmd = (
-        'sudo chown -R $USER:$USER ~/Techtile_Channel_Measurement/Raw_Data && '
-        'if [ -f ~/Techtile_Channel_Measurement/Raw_Data/measurement_resultsRX.txt ]; then '
-        'sudo chown $USER:$USER ~/Techtile_Channel_Measurement/Raw_Data/measurement_resultsRX.txt; '
-        'fi'
+        f"sudo chown -R $USER:$USER {base_path} && "
+        f"find {base_path} -type f \\( -name '*.txt' -o -name '*.csv' -o -name '*.npy' \\) "
+        f"-exec sudo chown $USER:$USER {{}} \\;"
     )
+
     cmd = ["ssh", target, remote_cmd]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True)
