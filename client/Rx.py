@@ -354,10 +354,6 @@ def main():
             f.write(f"{datetime.now()}: RX1 Pilot phase round 2: {phi2:.6f}\n")
         logger.info("Measurement results saved to %s", results_filename)
 
-        with open("phase_saveRx1.csv", "a", newline="") as csvfile:
-            csv_writer = csv.writer(csvfile)
-            csv_writer.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "Round1", phi1])
-            csv_writer.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "Round2", phi2])
         # 在控制台显示两轮测量结果
         print("Measurement DONE")
         print("Round 1 pilot phase: %.6f" % phi1)
