@@ -41,7 +41,7 @@ def run_remote_script(target, script_path):
 def main():
     # ✅ 你可以随意修改 TX 和 RX 设备名
     TX_NAME = "T01"
-    RX_NAMES = ["A05", "A06"]
+    RX_NAMES = ["ceiling"]
 
     inventory_file = "inventory.yaml"
     inventory = load_inventory(inventory_file)

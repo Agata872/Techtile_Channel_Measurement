@@ -16,7 +16,7 @@ if len(sys.argv) > 1:
     num_subscribers = int(sys.argv[2])
 else:
     delay = 5
-    num_subscribers = 3
+    num_subscribers = 35
 
 host = "*"
 sync_port = "5557"
