@@ -13,8 +13,17 @@ def load_inventory(inventory_file):
         sys.exit(1)
 
 def fix_remote_permissions(target):
-    """在远程主机上执行 chown 命令"""
-    remote_cmd = 'sudo chown -R $USER:$USER ~/Techtile_Channel_Measurement/Raw_Data'
+    """
+    在远程主机上执行权限修复命令：
+    1. 修复 Raw_Data 文件夹的权限
+    2. 修复 measurement_resultsRX.txt 文件权限（如果存在）
+    """
+    remote_cmd = (
+        'sudo chown -R $USER:$USER ~/Techtile_Channel_Measurement/Raw_Data && '
+        'if [ -f ~/Techtile_Channel_Measurement/Raw_Data/measurement_resultsRX.txt ]; then '
+        'sudo chown $USER:$USER ~/Techtile_Channel_Measurement/Raw_Data/measurement_resultsRX.txt; '
+        'fi'
+    )
     cmd = ["ssh", target, remote_cmd]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True)
@@ -31,7 +40,7 @@ def main():
     global_user = inventory.get("all", {}).get("vars", {}).get("ansible_user", "pi")
     all_hosts = inventory.get("all", {}).get("hosts", {})
 
-    # ✅ 正确提取 ceiling 组中的主机名
+    # ✅ 提取 ceiling 组中的主机名
     ceiling_group = inventory.get("all", {}).get("children", {}).get("ceiling", {}).get("hosts", {})
 
     if not ceiling_group:
@@ -50,7 +59,7 @@ def main():
             continue
 
         target = f"{global_user}@{ansible_host}"
-        print(f"🔧 正在修复 {hostname} ({target}) 的 Raw_Data 目录权限 ...")
+        print(f"🔧 正在修复 {hostname} ({target}) 的权限 ...")
         fix_remote_permissions(target)
 
 if __name__ == "__main__":
