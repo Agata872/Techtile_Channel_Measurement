@@ -280,7 +280,7 @@ def main():
         logger.info("Scheduled TX start time: %.6f", start_time_val)
 
         # 启动 TX 发射线程：此处信号参数设为幅度 1.0，相位 0.0（两个通道）
-        tx_thr = tx_thread(usrp, tx_streamer, quit_event, phase=[0.0, 0.0], amplitude=[1.0, 1.0],
+        tx_thr = tx_thread(usrp, tx_streamer, quit_event, phase=[0.0, 0.0], amplitude=[0.8, 0.8],
                            start_time=start_time_spec)
         # 同时启动 TX 异步元数据监控线程
         tx_meta_thr = tx_meta_thread(tx_streamer, quit_event)
