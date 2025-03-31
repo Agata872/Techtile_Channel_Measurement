@@ -6,7 +6,7 @@ import concurrent.futures
 
 # 默认远程用户名及 inventory 文件路径（根据需要修改）
 REMOTE_USER = "pi"
-INVENTORY_PATH = "inventory.yaml"
+INVENTORY_PATH = "../Process/inventory.yaml"
 # 远程数据目录（在远程设备上存放 .npy 文件的目录）
 REMOTE_DATA_DIR = "~/Techtile_Channel_Measurement/Raw_Data"
 
