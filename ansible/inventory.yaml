@@ -5,11 +5,11 @@ all:
     ansible_python_interpreter: /usr/bin/python3
     midspans:
       midspan-001:
-        hostname : techtile-midspan-01
-        ip : 192.108.0.4
-        type : PD-9624GC
-        label : MS1
-        nr-ports : 24
+        hostname: techtile-midspan-01
+        ip: 192.108.0.4
+        type: PD-9624GC
+        label: MS1
+        nr-ports: 24
       midspan-002:
         hostname: techtile-midspan-02
         ip: 192.108.0.5
@@ -46,7 +46,7 @@ all:
         type: PD-9612GC
         label: MS7
         nr-ports: 12
-      midspan-08:
+      midspan-008:
         hostname: techtile-midspan-08
         ip: 192.108.0.11
         type: PD-9612GC
@@ -93,22 +93,27 @@ all:
       ansible_host: rpi-g05.local
       midspan: midspan-005
       poe-port: 1
+      device_ip: 192.108.1.77
     G06:
       ansible_host: rpi-g06.local
       midspan: midspan-005
       poe-port: 2
+      device_ip: 192.108.1.74
     G07:
       ansible_host: rpi-g07.local
       midspan: midspan-005
       poe-port: 3
+      device_ip: 192.108.1.73
     G08:
       ansible_host: rpi-g08.local
       midspan: midspan-005
       poe-port: 4
+      device_ip: 192.108.1.76
     G09:
       ansible_host: rpi-g09.local
       midspan: midspan-005
       poe-port: 5
+      device_ip: 192.108.1.75
     G10:
       ansible_host: rpi-g10.local
       midspan: midspan-005
@@ -173,6 +178,7 @@ all:
       ansible_host: rpi-f05.local
       midspan: midspan-004
       poe-port: 17
+      device_ip: 192.108.1.54
     F06:
       ansible_host: rpi-f06.local
       midspan: midspan-004
@@ -181,10 +187,12 @@ all:
       ansible_host: rpi-f07.local
       midspan: midspan-004
       poe-port: 16
+      device_ip: 192.108.1.59
     F08:
       ansible_host: rpi-f08.local
       midspan: midspan-004
       poe-port: 20
+      device_ip: 192.108.1.60
     F09:
       ansible_host: rpi-f09.local
       midspan: midspan-004
@@ -193,6 +201,7 @@ all:
       ansible_host: rpi-f10.local
       midspan: midspan-004
       poe-port: 22
+      device_ip: 192.108.1.63
     F11:
       ansible_host: rpi-f11.local
       midspan: midspan-003
@@ -253,26 +262,32 @@ all:
       ansible_host: rpi-e05.local
       midspan: midspan-004
       poe-port: 11
+      device_ip: 192.108.1.64
     E06:
       ansible_host: rpi-e06.local
       midspan: midspan-004
       poe-port: 12
+      device_ip: 192.108.1.68
     E07:
       ansible_host: rpi-e07.local
       midspan: midspan-004
       poe-port: 13
+      device_ip: 192.108.1.70
     E08:
       ansible_host: rpi-e08.local
       midspan: midspan-004
       poe-port: 14
+      device_ip: 192.108.1.72
     E09:
       ansible_host: rpi-e09.local
       midspan: midspan-004
       poe-port: 15
+      device_ip: 192.108.1.55
     E10:
       ansible_host: rpi-e10.local
       midspan: midspan-004
       poe-port: 16
+      device_ip: 192.108.1.57
     E11:
       ansible_host: rpi-e11.local
       midspan: midspan-003
@@ -333,6 +348,7 @@ all:
       ansible_host: rpi-d05.local
       midspan: midspan-004
       poe-port: 5
+      device_ip: 192.108.1.69
     D06:
       ansible_host: rpi-d06.local
       midspan: midspan-004
@@ -341,10 +357,12 @@ all:
       ansible_host: rpi-d07.local
       midspan: midspan-004
       poe-port: 7
+      device_ip: 192.108.1.67
     D08:
       ansible_host: rpi-d08.local
       midspan: midspan-004
       poe-port: 8
+      device_ip: 192.108.1.71
     D09:
       ansible_host: rpi-d09.local
       midspan: midspan-004
@@ -353,6 +371,7 @@ all:
       ansible_host: rpi-d10.local
       midspan: midspan-004
       poe-port: 10
+      device_ip: 192.108.1.66
     D11:
       ansible_host: rpi-d11.local
       midspan: midspan-002
@@ -413,26 +432,32 @@ all:
       ansible_host: rpi-c05.local
       midspan: midspan-003
       poe-port: 9
+      device_ip: 192.108.1.15
     C06:
       ansible_host: rpi-c06.local
       midspan: midspan-003
       poe-port: 10
+      device_ip: 192.108.1.14
     C07:
       ansible_host: rpi-c07.local
       midspan: midspan-003
       poe-port: 11
+      device_ip: 192.108.1.17
     C08:
       ansible_host: rpi-c08.local
       midspan: midspan-003
       poe-port: 12
+      device_ip: 192.108.1.19
     C09:
       ansible_host: rpi-c09.local
       midspan: midspan-003
       poe-port: 13
+      device_ip: 192.108.1.8
     C10:
       ansible_host: rpi-c10.local
       midspan: midspan-003
       poe-port: 14
+      device_ip: 192.108.1.10
     C11:
       ansible_host: rpi-c11.local
       midspan: midspan-002
@@ -501,10 +526,12 @@ all:
       ansible_host: rpi-b07.local
       midspan: midspan-002
       poe-port: 11
+      device_ip: 192.108.1.18
     B08:
       ansible_host: rpi-b08.local
       midspan: midspan-002
       poe-port: 12
+      device_ip: 192.108.1.20
     B09:
       ansible_host: rpi-b09.local
       midspan: midspan-002
@@ -513,6 +540,7 @@ all:
       ansible_host: rpi-b10.local
       midspan: midspan-002
       poe-port: 14
+      device_ip: 192.108.1.34
     B11:
       ansible_host: rpi-b11.local
       midspan: midspan-001
@@ -573,22 +601,27 @@ all:
       ansible_host: rpi-a05.local
       midspan: midspan-001
       poe-port: 9
+      device_ip: 192.108.1.40
     A06:
       ansible_host: rpi-a06.local
       midspan: midspan-001
       poe-port: 10
+      device_ip: 192.108.1.27
     A07:
       ansible_host: rpi-a07.local
       midspan: midspan-001
       poe-port: 11
+      device_ip: 192.108.1.28
     A08:
       ansible_host: rpi-a08.local
       midspan: midspan-001
       poe-port: 12
+      device_ip: 192.108.1.29
     A09:
       ansible_host: rpi-a09.local
       midspan: midspan-001
       poe-port: 13
+      device_ip: 192.108.1.46
     A10:
       ansible_host: rpi-a10.local
       midspan: midspan-001
