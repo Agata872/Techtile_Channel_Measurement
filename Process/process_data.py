@@ -52,7 +52,7 @@ def process_remote_data(host_key, remote_ip, remote_user=REMOTE_USER, remote_dat
 
 
 def main():
-    inventory_path = "inventory.yml"  # 修改为你的 inventory 文件路径
+    inventory_path = "inventory.yaml"  # 修改为你的 inventory 文件路径
     hosts_info = get_ceiling_hosts(inventory_path)
     results = {}
     for host_key, remote_ip in hosts_info.items():
