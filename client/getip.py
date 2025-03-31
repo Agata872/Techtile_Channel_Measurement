@@ -44,7 +44,7 @@ def get_remote_ip(host_key, remote_host, remote_user=REMOTE_USER):
 
 
 def main():
-    inventory_path = "inventory.yml"  # 根据实际情况调整 inventory 文件路径
+    inventory_path = "inventory.yaml"  # 根据实际情况调整 inventory 文件路径
     hosts_info = get_ceiling_hosts(inventory_path)
     print("Ceiling 组设备及其获取的 IP 地址：")
     for host_key, remote_host in hosts_info.items():
