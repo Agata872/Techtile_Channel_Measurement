@@ -5,7 +5,7 @@ import os
 
 # 全局配置
 REMOTE_USER = "pi"  # 远程设备默认用户名
-INVENTORY_PATH = "inventory.yml"  # 请确保此路径正确
+INVENTORY_PATH = "inventory.yaml"  # 请确保此路径正确
 # 目标数据目录（处理脚本中也采用此目录）
 REMOTE_DATA_PATH = "~/Techtile_Channel_Measurement/Raw_Data"
 
