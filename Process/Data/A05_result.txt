@@ -6768,8 +6768,6 @@ File: data_offline_A05_pilot_round1_20250329_094527.npy
   Max I: CH0 0.019044, CH1 0.001434
   Max Q: CH0 0.019349, CH1 0.001495
 ----------------------------------------
-Processing file: result.npy
-Skipping result.npy: invalid shape (expected 2 rows)
 Processing file: data_offline_A05_pilot_round2_20250329_094537.npy
 File: data_offline_A05_pilot_round2_20250329_094537.npy
   CircMean phase diff: 1.828007
