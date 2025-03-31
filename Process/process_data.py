@@ -1,69 +1,63 @@
-import yaml
-import subprocess
+#!/usr/bin/env python3
+import os
+import glob
+import numpy as np
 
-REMOTE_USER = "pi"  # 默认远程用户名
-REMOTE_DATA_PATH = "~/Techtile_Channel_Measurement/Raw_Data"
 
-
-def get_ceiling_hosts(inventory_path):
+def process_raw_data(raw_data_dir):
     """
-    从 YAML 格式的 inventory 文件中提取 ceiling 组下所有设备。
-    优先使用每个设备定义中的 device_ip 字段，如果不存在则使用 ansible_host。
-    返回一个字典，键为设备标识（例如 A05），值为用于连接的 IP 地址。
+    遍历 raw_data_dir 目录下所有 .npy 文件，
+    对每个文件加载数据，检查是否为二维且有两行，
+    分别计算每一行的平均值，并将结果保存到字典中，
+    key 为文件名称（不含扩展名），value 为 [row1_avg, row2_avg]
     """
-    with open(inventory_path, 'r', encoding='utf-8') as f:
-        data = yaml.safe_load(f)
-    # 获取 ceiling 组中设备的标识列表
-    ceiling_keys = list(data["all"]["children"]["ceiling"]["hosts"].keys())
-    global_hosts = data["all"]["hosts"]
+    npy_files = glob.glob(os.path.join(raw_data_dir, '*.npy'))
+    results = {}
 
-    hosts_info = {}
-    for key in ceiling_keys:
-        host_entry = global_hosts.get(key, {})
-        if "device_ip" in host_entry:
-            hosts_info[key] = host_entry["device_ip"]
-        else:
-            hosts_info[key] = host_entry.get("ansible_host", key)
-    return hosts_info
+    if not npy_files:
+        print(f"目录 {raw_data_dir} 下未找到 .npy 文件。")
+        return results
+
+    for file_path in npy_files:
+        file_name = os.path.basename(file_path)
+        file_id = os.path.splitext(file_name)[0]
+        try:
+            data = np.load(file_path)
+            # 检查数据是否为二维数组且有两行
+            if data.ndim != 2 or data.shape[0] != 2:
+                print(f"文件 {file_name} 的数据格式不符合要求（必须为二维且有两行），跳过该文件。")
+                continue
+            avg_row1 = np.mean(data[0])
+            avg_row2 = np.mean(data[1])
+            results[file_id] = [avg_row1, avg_row2]
+            print(f"处理 {file_name} 成功，第一行平均值: {avg_row1}, 第二行平均值: {avg_row2}")
+        except Exception as e:
+            print(f"处理 {file_name} 失败：{e}")
+    return results
 
 
-def process_remote_data(host_key, remote_ip, remote_user=REMOTE_USER, remote_data_path=REMOTE_DATA_PATH):
+def save_results(results, output_file):
     """
-    通过 SSH 登录远程设备，进入指定的目录（例如 REMOTE_DATA_PATH），
-    并执行数据处理命令（本示例中列出该目录下的文件列表）。
-    你可以根据实际需求修改 remote_command 为其他数据处理操作。
+    将结果字典保存到 output_file 中（使用 np.save 保存）
     """
-    remote_command = (
-        f'cd {remote_data_path} && '
-        'echo "处理数据目录: $(pwd)" && '
-        'echo "文件列表:" && ls -l'
-    )
-    cmd = ["ssh", f"{remote_user}@{remote_ip}", remote_command]
-    print(f"正在处理 {host_key} ({remote_ip}) 上的数据...")
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+        np.save(output_file, results)
+        print(f"结果已保存到 {output_file}")
     except Exception as e:
-        print(f"{host_key} ({remote_ip}) 连接异常: {e}")
-        return None
-    if result.returncode != 0:
-        print(f"{host_key} ({remote_ip}) 数据处理失败: {result.stderr.strip()}")
-        return None
-    return result.stdout.strip()
+        print(f"保存结果失败：{e}")
 
 
 def main():
-    inventory_path = "inventory.yaml"  # 修改为你的 inventory 文件路径
-    hosts_info = get_ceiling_hosts(inventory_path)
-    results = {}
-    for host_key, remote_ip in hosts_info.items():
-        output = process_remote_data(host_key, remote_ip)
-        if output:
-            results[host_key] = output
+    # 目标数据目录，可以根据实际情况修改
+    raw_data_dir = os.path.expanduser('~/Techtile_Channel_Measurement/Raw_Data')
+    # 输出文件保存到该目录下
+    output_file = os.path.join(raw_data_dir, 'result.npy')
 
-    print("\n所有设备处理结果：")
-    for host, output in results.items():
-        print(f"{host} ({hosts_info[host]}):\n{output}\n{'-' * 40}")
+    # 处理所有 npy 文件
+    results = process_raw_data(raw_data_dir)
+    # 保存处理结果
+    save_results(results, output_file)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
