@@ -2,6 +2,7 @@
 import yaml
 import subprocess
 import os
+import concurrent.futures
 
 # 默认远程用户名及 inventory 文件路径（根据需要修改）
 REMOTE_USER = "pi"
@@ -40,6 +41,7 @@ def process_remote_device(device_name, remote_ip):
       - 计算两个通道间的相位差，得到循环均值和线性均值，
       - 计算每个通道的平均幅度、最大 I 和最大 Q 分量。
     脚本将处理结果（文本摘要）打印出来，最终由本地保存为 "{设备名称}_result.txt"。
+    同时在处理时打印当前处理的文件名称以便查看进度。
     """
     remote_script = r'''
 import os, sys, glob, numpy as np
@@ -55,6 +57,7 @@ def process_data(raw_data_dir):
         return "\n".join(output_lines)
     for file_path in npy_files:
         file_name = os.path.basename(file_path)
+        output_lines.append("Processing file: {}".format(file_name))
         file_id = os.path.splitext(file_name)[0]
         try:
             data = np.load(file_path)
@@ -94,7 +97,7 @@ print(result_text)
     print(f"Processing device {device_name} ({remote_ip}) ...")
     try:
         result = subprocess.run(cmd, input=remote_script, text=True,
-                                capture_output=True, timeout=120)
+                                capture_output=True)
     except Exception as e:
         print(f"Error connecting to {device_name} ({remote_ip}): {e}")
         return None
@@ -106,18 +109,32 @@ print(result_text)
     return result.stdout
 
 
+def process_device(device_name, remote_ip):
+    """
+    封装 process_remote_device() 并将结果保存到本地文件 {device_name}_result.txt
+    """
+    result_text = process_remote_device(device_name, remote_ip)
+    if result_text is not None:
+        filename = f"{device_name}_result.txt"
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(result_text)
+        print(f"Result for {device_name} saved to {filename}")
+    else:
+        print(f"Failed to process device {device_name} ({remote_ip})")
+
+
 def main():
     hosts_info = get_ceiling_hosts(INVENTORY_PATH)
-    for device_name, remote_ip in hosts_info.items():
-        result_text = process_remote_device(device_name, remote_ip)
-        if result_text is not None:
-            # 保存结果到本地文件，文件名格式为 "{设备名称}_result.txt"
-            filename = f"{device_name}_result.txt"
-            with open(filename, "w", encoding="utf-8") as f:
-                f.write(result_text)
-            print(f"Result for {device_name} saved to {filename}")
-        else:
-            print(f"Failed to process device {device_name} ({remote_ip})")
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = []
+        for device_name, remote_ip in hosts_info.items():
+            futures.append(executor.submit(process_device, device_name, remote_ip))
+        # 等待所有线程完成
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                future.result()
+            except Exception as exc:
+                print(f"Generated an exception: {exc}")
 
 
 if __name__ == "__main__":
