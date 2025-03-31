@@ -9938,26 +9938,6 @@ File: data_offline_A06_pilot_round2_20250329_143954.npy
   Max I: CH0 0.010407, CH1 0.001679
   Max Q: CH0 0.009827, CH1 0.001648
 ----------------------------------------
-Processing file: data_offline_A06_pilot_round1_20250329_144021.npy
-File: data_offline_A06_pilot_round1_20250329_144021.npy
-  CircMean phase diff: 1.609556
-  Linear mean phase diff: -3.427128
-  Frequency offset CH0: 0.0000
-  Frequency offset CH1: 0.0000
-  Avg amplitude: CH0 0.012017, CH1 0.000831
-  Max I: CH0 0.017975, CH1 0.001679
-  Max Q: CH0 0.017762, CH1 0.001617
-----------------------------------------
-Processing file: data_offline_A06_pilot_round2_20250329_144031.npy
-File: data_offline_A06_pilot_round2_20250329_144031.npy
-  CircMean phase diff: 1.626481
-  Linear mean phase diff: -4.211247
-  Frequency offset CH0: 0.0000
-  Frequency offset CH1: 0.0000
-  Avg amplitude: CH0 0.012099, CH1 0.000830
-  Max I: CH0 0.017731, CH1 0.001770
-  Max Q: CH0 0.018464, CH1 0.001770
-----------------------------------------
 Processing file: data_offline_A06_pilot_round1_20250329_145749.npy
 File: data_offline_A06_pilot_round1_20250329_145749.npy
   CircMean phase diff: 2.272801
@@ -9997,16 +9977,6 @@ File: data_offline_A06_pilot_round2_20250329_145837.npy
   Avg amplitude: CH0 0.013215, CH1 0.000777
   Max I: CH0 0.019074, CH1 0.001709
   Max Q: CH0 0.019410, CH1 0.001679
-----------------------------------------
-Processing file: data_offline_A06_pilot_round1_20250329_145905.npy
-File: data_offline_A06_pilot_round1_20250329_145905.npy
-  CircMean phase diff: 1.794684
-  Linear mean phase diff: -4.281299
-  Frequency offset CH0: 0.0000
-  Frequency offset CH1: 0.0000
-  Avg amplitude: CH0 0.005786, CH1 0.000441
-  Max I: CH0 0.012177, CH1 0.001312
-  Max Q: CH0 0.011811, CH1 0.001404
 ----------------------------------------
 Processing file: data_offline_A06_pilot_round2_20250329_145915.npy
 File: data_offline_A06_pilot_round2_20250329_145915.npy
