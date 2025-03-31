@@ -87,8 +87,8 @@ def main():
         result_array[i, :len(row)] = row
 
     # 保存为 npy 文件
-    np.save("phase_data.npy", result_array)
-    print("所有设备数据已保存为二维数组至 phase_data.npy")
+    np.save("round1_phase_data.npy", result_array)
+    print("所有设备数据已保存为二维数组至 round1_phase_data.npy")
 
 
 if __name__ == "__main__":
