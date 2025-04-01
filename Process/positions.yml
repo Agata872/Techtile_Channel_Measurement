@@ -1,0 +1,2847 @@
+# include normal of tiles and thus also the antennas/microphones
+tiles:
+  - tile: A01
+    normal: (0,1,0)
+  - tile: A02
+    normal: (0,1,0)
+  - tile: A03
+    normal: (0,1,0)
+  - tile: A04
+    normal: (0,1,0)
+  - tile: A11
+    normal: (0,-1,0)
+  - tile: A12
+    normal: (0,-1,0)
+  - tile: A13
+    normal: (0,-1,0)
+  - tile: A14
+    normal: (0,-1,0)
+  - tile: B01
+    normal: (0,1,0)
+  - tile: B02
+    normal: (0,1,0)
+  - tile: B03
+    normal: (0,1,0)
+  - tile: B04
+    normal: (0,1,0)
+  - tile: B11
+    normal: (0,-1,0)
+  - tile: B12
+    normal: (0,-1,0)
+  - tile: B13
+    normal: (0,-1,0)
+  - tile: B14
+    normal: (0,-1,0)
+  - tile: C01
+    normal: (0,1,0)
+  - tile: C02
+    normal: (0,1,0)
+  - tile: C03
+    normal: (0,1,0)
+  - tile: C04
+    normal: (0,1,0)
+  - tile: C11
+    normal: (0,-1,0)
+  - tile: C12
+    normal: (0,-1,0)
+  - tile: C13
+    normal: (0,-1,0)
+  - tile: C14
+    normal: (0,-1,0)
+  - tile: D01
+    normal: (0,1,0)
+  - tile: D02
+    normal: (0,1,0)
+  - tile: D03
+    normal: (0,1,0)
+  - tile: D04
+    normal: (0,1,0)
+  - tile: D11
+    normal: (0,-1,0)
+  - tile: D12
+    normal: (0,-1,0)
+  - tile: D13
+    normal: (0,-1,0)
+  - tile: D14
+    normal: (0,-1,0)
+  - tile: E01
+    normal: (0,1,0)
+  - tile: E02
+    normal: (0,1,0)
+  - tile: E03
+    normal: (0,1,0)
+  - tile: E04
+    normal: (0,1,0)
+  - tile: E11
+    normal: (0,-1,0)
+  - tile: E12
+    normal: (0,-1,0)
+  - tile: E13
+    normal: (0,-1,0)
+  - tile: E14
+    normal: (0,-1,0)
+  - tile: F01
+    normal: (0,1,0)
+  - tile: F02
+    normal: (0,1,0)
+  - tile: F03
+    normal: (0,1,0)
+  - tile: F04
+    normal: (0,1,0)
+  - tile: F11
+    normal: (0,-1,0)
+  - tile: F12
+    normal: (0,-1,0)
+  - tile: F13
+    normal: (0,-1,0)
+  - tile: F14
+    normal: (0,-1,0)
+  - tile: G01
+    normal: (0,1,0)
+  - tile: G02
+    normal: (0,1,0)
+  - tile: G03
+    normal: (0,1,0)
+  - tile: G04
+    normal: (0,1,0)
+  - tile: G11
+    normal: (0,-1,0)
+  - tile: G12
+    normal: (0,-1,0)
+  - tile: G13
+    normal: (0,-1,0)
+  - tile: G14
+    normal: (0,-1,0)
+
+microphones:
+  - tile: 'A01'
+    daq: '/PXI1Slot12/ai1'
+    x: 8.37
+    y: 0.0
+    z: 0.266
+  - tile: 'A02'
+    daq: '/PXI1Slot12/ai2'
+    x: 8.37
+    y: 0.0
+    z: 0.866
+  - tile: 'A03'
+    daq: '/PXI1Slot12/ai3'
+    x: 8.37
+    y: 0.0
+    z: 1.466
+  - tile: 'A04'
+    daq: '/PXI1Slot12/ai4'
+    x: 8.37
+    y: 0.0
+    z: 2.066
+  - tile: 'A05'
+    daq: '/PXI1Slot12/ai5'
+    x: 8.37
+    y: 0.467
+    z: 2.4
+  - tile: 'A06'
+    daq: '/PXI1Slot12/ai6'
+    x: 7.408
+    y: 1.067
+    z: 2.4
+  - tile: 'A07'
+    daq: '/PXI1Slot12/ai7'
+    x: 8.37
+    y: 1.667
+    z: 2.4
+  - tile: 'A08'
+    daq: '/PXI1Slot12/ai8'
+    x: 7.408
+    y: 2.267
+    z: 2.4
+  - tile: 'A09'
+    daq: '/PXI1Slot12/ai9'
+    x: 7.408
+    y: 2.867
+    z: 2.4
+  - tile: 'A10'
+    daq: '/PXI1Slot12/ai10'
+    x: 7.408
+    y: 3.467
+    z: 2.4
+  - tile: 'A11'
+    daq: '/PXI1Slot12/ai11'
+    x: 7.408
+    y: 4.0
+    z: 2.066
+  - tile: 'A12'
+    daq: '/PXI1Slot12/ai12'
+    x: 7.408
+    y: 4.0
+    z: 1.466
+  - tile: 'A13'
+    daq: '/PXI1Slot12/ai13'
+    x: 7.408
+    y: 4.0
+    z: 0.866
+  - tile: 'A14'
+    daq: '/PXI1Slot12/ai14'
+    x: 7.408
+    y: 4.0
+    z: 0.266
+  - tile: 'B01'
+    daq: '/PXI1Slot13/ai1'
+    x: 7.168
+    y: 0.0
+    z: 0.266
+  - tile: 'B02'
+    daq: '/PXI1Slot13/ai2'
+    x: 7.168
+    y: 0.0
+    z: 0.866
+  - tile: 'B03'
+    daq: '/PXI1Slot13/ai3'
+    x: 7.168
+    y: 0.0
+    z: 1.466
+  - tile: 'B04'
+    daq: '/PXI1Slot13/ai4'
+    x: 7.168
+    y: 0.0
+    z: 2.066
+  - tile: 'B05'
+    daq: '/PXI1Slot13/ai5'
+    x: 7.168
+    y: 0.467
+    z: 2.4
+  - tile: 'B06'
+    daq: '/PXI1Slot13/ai6'
+    x: 7.168
+    y: 1.067
+    z: 2.4
+  - tile: 'B07'
+    daq: '/PXI1Slot13/ai7'
+    x: 7.168
+    y: 1.667
+    z: 2.4
+  - tile: 'B08'
+    daq: '/PXI1Slot13/ai8'
+    x: 6.206
+    y: 2.267
+    z: 2.4
+  - tile: 'B09'
+    daq: '/PXI1Slot13/ai9'
+    x: 6.206
+    y: 2.867
+    z: 2.4
+  - tile: 'B10'
+    daq: '/PXI1Slot13/ai10'
+    x: 6.206
+    y: 3.467
+    z: 2.4
+  - tile: 'B11'
+    daq: '/PXI1Slot13/ai11'
+    x: 6.206
+    y: 4.0
+    z: 2.066
+  - tile: 'B12'
+    daq: '/PXI1Slot13/ai12'
+    x: 6.206
+    y: 4.0
+    z: 1.466
+  - tile: 'B13'
+    daq: '/PXI1Slot13/ai13'
+    x: 6.206
+    y: 4.0
+    z: 0.866
+  - tile: 'B14'
+    daq: '/PXI1Slot13/ai14'
+    x: 6.206
+    y: 4.0
+    z: 0.266
+  - tile: 'C01'
+    daq: '/PXI1Slot14/ai1'
+    x: 5.966
+    y: 0.0
+    z: 0.266
+  - tile: 'C02'
+    daq: '/PXI1Slot14/ai2'
+    x: 5.966
+    y: 0.0
+    z: 0.866
+  - tile: 'C03'
+    daq: '/PXI1Slot14/ai3'
+    x: 5.966
+    y: 0.0
+    z: 1.466
+  - tile: 'C04'
+    daq: '/PXI1Slot14/ai4'
+    x: 5.966
+    y: 0.0
+    z: 2.066
+  - tile: 'C05'
+    daq: '/PXI1Slot14/ai5'
+    x: 5.966
+    y: 0.467
+    z: 2.4
+  - tile: 'C06'
+    daq: '/PXI1Slot14/ai6'
+    x: 5.004
+    y: 1.067
+    z: 2.4
+  - tile: 'C07'
+    daq: '/PXI1Slot14/ai7'
+    x: 5.966
+    y: 1.667
+    z: 2.4
+  - tile: 'C08'
+    daq: '/PXI1Slot14/ai8'
+    x: 5.004
+    y: 2.267
+    z: 2.4
+  - tile: 'C09'
+    daq: '/PXI1Slot14/ai9'
+    x: 5.004
+    y: 2.867
+    z: 2.4
+  - tile: 'C10'
+    daq: '/PXI1Slot14/ai10'
+    x: 5.004
+    y: 3.467
+    z: 2.4
+  - tile: 'C11'
+    daq: '/PXI1Slot14/ai11'
+    x: 5.004
+    y: 4.0
+    z: 2.066
+  - tile: 'C12'
+    daq: '/PXI1Slot14/ai12'
+    x: 5.004
+    y: 4.0
+    z: 1.466
+  - tile: 'C13'
+    daq: '/PXI1Slot14/ai13'
+    x: 5.004
+    y: 4.0
+    z: 0.866
+  - tile: 'C14'
+    daq: '/PXI1Slot14/ai14'
+    x: 5.004
+    y: 4.0
+    z: 0.266
+  - tile: 'D01'
+    daq: '/PXI1Slot15/ai1'
+    x: 4.764
+    y: 0.0
+    z: 0.266
+  - tile: 'D02'
+    daq: '/PXI1Slot15/ai2'
+    x: 4.764
+    y: 0.0
+    z: 0.866
+  - tile: 'D03'
+    daq: '/PXI1Slot15/ai3'
+    x: 4.764
+    y: 0.0
+    z: 1.466
+  - tile: 'D04'
+    daq: '/PXI1Slot15/ai4'
+    x: 4.764
+    y: 0.0
+    z: 2.066
+  - tile: 'D05'
+    daq: '/PXI1Slot15/ai5'
+    x: 4.764
+    y: 0.467
+    z: 2.4
+  - tile: 'D06'
+    daq: '/PXI1Slot15/ai6'
+    x: 4.764
+    y: 1.067
+    z: 2.4
+  - tile: 'D07'
+    daq: '/PXI1Slot15/ai7'
+    x: 4.764
+    y: 1.667
+    z: 2.4
+  - tile: 'D08'
+    daq: '/PXI1Slot15/ai8'
+    x: 3.802
+    y: 2.267
+    z: 2.4
+  - tile: 'D09'
+    daq: '/PXI1Slot15/ai9'
+    x: 3.802
+    y: 2.867
+    z: 2.4
+  - tile: 'D10'
+    daq: '/PXI1Slot15/ai10'
+    x: 3.802
+    y: 3.467
+    z: 2.4
+  - tile: 'D11'
+    daq: '/PXI1Slot15/ai11'
+    x: 3.802
+    y: 4.0
+    z: 2.066
+  - tile: 'D12'
+    daq: '/PXI1Slot15/ai12'
+    x: 3.802
+    y: 4.0
+    z: 1.466
+  - tile: 'D13'
+    daq: '/PXI1Slot15/ai13'
+    x: 3.802
+    y: 4.0
+    z: 0.866
+  - tile: 'D14'
+    daq: '/PXI1Slot15/ai14'
+    x: 3.802
+    y: 4.0
+    z: 0.266
+  - tile: 'E01'
+    daq: '/PXI1Slot16/ai1'
+    x: 3.562
+    y: 0.0
+    z: 0.266
+  - tile: 'E02'
+    daq: '/PXI1Slot16/ai2'
+    x: 3.562
+    y: 0.0
+    z: 0.866
+  - tile: 'E03'
+    daq: '/PXI1Slot16/ai3'
+    x: 3.562
+    y: 0.0
+    z: 1.466
+  - tile: 'E04'
+    daq: '/PXI1Slot16/ai4'
+    x: 3.562
+    y: 0.0
+    z: 2.066
+  - tile: 'E05'
+    daq: '/PXI1Slot16/ai5'
+    x: 3.562
+    y: 0.467
+    z: 2.4
+  - tile: 'E06'
+    daq: '/PXI1Slot16/ai6'
+    x: 2.6
+    y: 1.067
+    z: 2.4
+  - tile: 'E07'
+    daq: '/PXI1Slot16/ai7'
+    x: 3.562
+    y: 1.667
+    z: 2.4
+  - tile: 'E08'
+    daq: '/PXI1Slot16/ai8'
+    x: 2.6
+    y: 2.267
+    z: 2.4
+  - tile: 'E09'
+    daq: '/PXI1Slot16/ai9'
+    x: 2.6
+    y: 2.867
+    z: 2.4
+  - tile: 'E10'
+    daq: '/PXI1Slot16/ai10'
+    x: 2.6
+    y: 3.467
+    z: 2.4
+  - tile: 'E11'
+    daq: '/PXI1Slot16/ai11'
+    x: 2.6
+    y: 4.0
+    z: 2.066
+  - tile: 'E12'
+    daq: '/PXI1Slot16/ai12'
+    x: 2.6
+    y: 4.0
+    z: 1.466
+  - tile: 'E13'
+    daq: '/PXI1Slot16/ai13'
+    x: 2.6
+    y: 4.0
+    z: 0.866
+  - tile: 'E14'
+    daq: '/PXI1Slot16/ai14'
+    x: 2.6
+    y: 4.0
+    z: 0.266
+  - tile: 'F01'
+    daq: '/PXI1Slot17/ai1'
+    x: 2.36
+    y: 0.0
+    z: 0.266
+  - tile: 'F02'
+    daq: '/PXI1Slot17/ai2'
+    x: 2.36
+    y: 0.0
+    z: 0.866
+  - tile: 'F03'
+    daq: '/PXI1Slot17/ai3'
+    x: 2.36
+    y: 0.0
+    z: 1.466
+  - tile: 'F04'
+    daq: '/PXI1Slot17/ai4'
+    x: 2.36
+    y: 0.0
+    z: 2.066
+  - tile: 'F05'
+    daq: '/PXI1Slot17/ai5'
+    x: 2.36
+    y: 0.467
+    z: 2.4
+  - tile: 'F06'
+    daq: '/PXI1Slot17/ai6'
+    x: 2.36
+    y: 1.067
+    z: 2.4
+  - tile: 'F07'
+    daq: '/PXI1Slot17/ai7'
+    x: 2.36
+    y: 1.667
+    z: 2.4
+  - tile: 'F08'
+    daq: '/PXI1Slot17/ai8'
+    x: 1.398
+    y: 2.267
+    z: 2.4
+  - tile: 'F09'
+    daq: '/PXI1Slot17/ai9'
+    x: 1.398
+    y: 2.867
+    z: 2.4
+  - tile: 'F10'
+    daq: '/PXI1Slot17/ai10'
+    x: 1.398
+    y: 3.467
+    z: 2.4
+  - tile: 'F11'
+    daq: '/PXI1Slot17/ai11'
+    x: 1.398
+    y: 4.0
+    z: 2.066
+  - tile: 'F12'
+    daq: '/PXI1Slot17/ai12'
+    x: 1.398
+    y: 4.0
+    z: 1.466
+  - tile: 'F13'
+    daq: '/PXI1Slot17/ai13'
+    x: 1.398
+    y: 4.0
+    z: 0.866
+  - tile: 'F14'
+    daq: '/PXI1Slot17/ai14'
+    x: 1.398
+    y: 4.0
+    z: 0.266
+  - tile: 'G01'
+    daq: '/PXI1Slot18/ai1'
+    x: 1.158
+    y: 0.0
+    z: 0.266
+  - tile: 'G02'
+    daq: '/PXI1Slot18/ai2'
+    x: 1.158
+    y: 0.0
+    z: 0.866
+  - tile: 'G03'
+    daq: '/PXI1Slot18/ai3'
+    x: 1.158
+    y: 0.0
+    z: 1.466
+  - tile: 'G04'
+    daq: '/PXI1Slot18/ai4'
+    x: 1.158
+    y: 0.0
+    z: 2.066
+  - tile: 'G05'
+    daq: '/PXI1Slot18/ai5'
+    x: 1.158
+    y: 0.467
+    z: 2.4
+  - tile: 'G06'
+    daq: '/PXI1Slot18/ai6'
+    x: 0.196
+    y: 1.067
+    z: 2.4
+  - tile: 'G07'
+    daq: '/PXI1Slot18/ai7'
+    x: 1.158
+    y: 1.667
+    z: 2.4
+  - tile: 'G08'
+    daq: '/PXI1Slot18/ai8'
+    x: 0.196
+    y: 2.267
+    z: 2.4
+  - tile: 'G09'
+    daq: '/PXI1Slot18/ai9'
+    x: 0.196
+    y: 2.867
+    z: 2.4
+  - tile: 'G10'
+    daq: '/PXI1Slot18/ai10'
+    x: 0.196
+    y: 3.467
+    z: 2.4
+  - tile: 'G11'
+    daq: '/PXI1Slot18/ai11'
+    x: 0.196
+    y: 4.0
+    z: 2.066
+  - tile: 'G12'
+    daq: '/PXI1Slot18/ai12'
+    x: 0.196
+    y: 4.0
+    z: 1.466
+  - tile: 'G13'
+    daq: '/PXI1Slot18/ai13'
+    x: 0.196
+    y: 4.0
+    z: 0.866
+  - tile: 'G14'
+    daq: '/PXI1Slot18/ai14'
+    x: 0.196
+    y: 4.0
+    z: 0.266
+antennes:
+  - tile: 'A01'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 0.0
+        z: 0.45
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 7.85
+        y: 0.0
+        z: 0.45
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'A02'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 0.0
+        z: 1.05
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 7.85
+        y: 0.0
+        z: 1.05
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'A03'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 0.0
+        z: 1.65
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 7.85
+        y: 0.0
+        z: 1.65
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'A04'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 0.0
+        z: 2.25
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 7.85
+        y: 0.0
+        z: 2.25
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'A05'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 0.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 7.85
+        y: 0.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'A06'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 1.26
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 7.85
+        y: 1.26
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'A07'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 1.86
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 7.85
+        y: 1.86
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'A08'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 2.46
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 7.85
+        y: 2.46
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'A09'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 3.06
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 7.85
+        y: 3.06
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'A10'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 3.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 7.85
+        y: 3.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'A11'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 4.0
+        z: 2.25
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 7.85
+        y: 4.0
+        z: 2.25
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'A12'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 4.0
+        z: 1.65
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 7.85
+        y: 4.0
+        z: 1.65
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'A13'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 4.0
+        z: 1.05
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 7.85
+        y: 4.0
+        z: 1.05
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'A14'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 4.0
+        z: 0.45
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 7.85
+        y: 4.0
+        z: 0.45
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'A15'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 0.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 7.85
+        y: 0.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'A16'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 1.26
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 7.85
+        y: 1.26
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'A17'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 1.86
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 7.85
+        y: 1.86
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'A18'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 2.46
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 7.85
+        y: 2.46
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'A19'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 3.06
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 7.85
+        y: 3.06
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'A20'
+    channels:
+      - ch: 0
+        x: 7.55
+        y: 3.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 7.85
+        y: 3.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'B01'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 0.0
+        z: 0.45
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 6.65
+        y: 0.0
+        z: 0.45
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'B02'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 0.0
+        z: 1.05
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 6.65
+        y: 0.0
+        z: 1.05
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'B03'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 0.0
+        z: 1.65
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 6.65
+        y: 0.0
+        z: 1.65
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'B04'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 0.0
+        z: 2.25
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 6.65
+        y: 0.0
+        z: 2.25
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'B05'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 0.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 6.65
+        y: 0.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'B06'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 1.26
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 6.65
+        y: 1.26
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'B07'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 1.86
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 6.65
+        y: 1.86
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'B08'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 2.46
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 6.65
+        y: 2.46
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'B09'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 3.06
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 6.65
+        y: 3.06
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'B10'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 3.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 6.65
+        y: 3.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'B11'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 4.0
+        z: 2.25
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 6.65
+        y: 4.0
+        z: 2.25
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'B12'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 4.0
+        z: 1.65
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 6.65
+        y: 4.0
+        z: 1.65
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'B13'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 4.0
+        z: 1.05
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 6.65
+        y: 4.0
+        z: 1.05
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'B14'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 4.0
+        z: 0.45
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 6.65
+        y: 4.0
+        z: 0.45
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'B15'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 0.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 6.65
+        y: 0.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'B16'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 1.26
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 6.65
+        y: 1.26
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'B17'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 1.86
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 6.65
+        y: 1.86
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'B18'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 2.46
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 6.65
+        y: 2.46
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'B19'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 3.06
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 6.65
+        y: 3.06
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'B20'
+    channels:
+      - ch: 0
+        x: 6.35
+        y: 3.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 6.65
+        y: 3.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'C01'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 0.0
+        z: 0.45
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 5.45
+        y: 0.0
+        z: 0.45
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'C02'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 0.0
+        z: 1.05
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 5.45
+        y: 0.0
+        z: 1.05
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'C03'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 0.0
+        z: 1.65
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 5.45
+        y: 0.0
+        z: 1.65
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'C04'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 0.0
+        z: 2.25
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 5.45
+        y: 0.0
+        z: 2.25
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'C05'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 0.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 5.45
+        y: 0.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'C06'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 1.26
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 5.45
+        y: 1.26
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'C07'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 1.86
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 5.45
+        y: 1.86
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'C08'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 2.46
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 5.45
+        y: 2.46
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'C09'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 3.06
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 5.45
+        y: 3.06
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'C10'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 3.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 5.45
+        y: 3.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'C11'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 4.0
+        z: 2.25
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 5.45
+        y: 4.0
+        z: 2.25
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'C12'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 4.0
+        z: 1.65
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 5.45
+        y: 4.0
+        z: 1.65
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'C13'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 4.0
+        z: 1.05
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 5.45
+        y: 4.0
+        z: 1.05
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'C14'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 4.0
+        z: 0.45
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 5.45
+        y: 4.0
+        z: 0.45
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'C15'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 0.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 5.45
+        y: 0.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'C16'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 1.26
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 5.45
+        y: 1.26
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'C17'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 1.86
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 5.45
+        y: 1.86
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'C18'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 2.46
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 5.45
+        y: 2.46
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'C19'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 3.06
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 5.45
+        y: 3.06
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'C20'
+    channels:
+      - ch: 0
+        x: 5.15
+        y: 3.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 5.45
+        y: 3.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'D01'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 0.0
+        z: 0.45
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 4.25
+        y: 0.0
+        z: 0.45
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'D02'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 0.0
+        z: 1.05
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 4.25
+        y: 0.0
+        z: 1.05
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'D03'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 0.0
+        z: 1.65
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 4.25
+        y: 0.0
+        z: 1.65
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'D04'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 0.0
+        z: 2.25
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 4.25
+        y: 0.0
+        z: 2.25
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'D05'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 0.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 4.25
+        y: 0.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'D06'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 1.26
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 4.25
+        y: 1.26
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'D07'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 1.86
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 4.25
+        y: 1.86
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'D08'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 2.46
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 4.25
+        y: 2.46
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'D09'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 3.06
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 4.25
+        y: 3.06
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'D10'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 3.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 4.25
+        y: 3.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'D11'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 4.0
+        z: 2.25
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 4.25
+        y: 4.0
+        z: 2.25
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'D12'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 4.0
+        z: 1.65
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 4.25
+        y: 4.0
+        z: 1.65
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'D13'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 4.0
+        z: 1.05
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 4.25
+        y: 4.0
+        z: 1.05
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'D14'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 4.0
+        z: 0.45
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 4.25
+        y: 4.0
+        z: 0.45
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'D15'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 0.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 4.25
+        y: 0.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'D16'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 1.26
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 4.25
+        y: 1.26
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'D17'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 1.86
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 4.25
+        y: 1.86
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'D18'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 2.46
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 4.25
+        y: 2.46
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'D19'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 3.06
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 4.25
+        y: 3.06
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'D20'
+    channels:
+      - ch: 0
+        x: 3.95
+        y: 3.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 4.25
+        y: 3.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'E01'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 0.0
+        z: 0.45
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 3.05
+        y: 0.0
+        z: 0.45
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'E02'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 0.0
+        z: 1.05
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 3.05
+        y: 0.0
+        z: 1.05
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'E03'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 0.0
+        z: 1.65
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 3.05
+        y: 0.0
+        z: 1.65
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'E04'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 0.0
+        z: 2.25
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 3.05
+        y: 0.0
+        z: 2.25
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'E05'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 0.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 3.05
+        y: 0.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'E06'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 1.26
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 3.05
+        y: 1.26
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'E07'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 1.86
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 3.05
+        y: 1.86
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'E08'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 2.46
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 3.05
+        y: 2.46
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'E09'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 3.06
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 3.05
+        y: 3.06
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'E10'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 3.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 3.05
+        y: 3.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'E11'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 4.0
+        z: 2.25
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 3.05
+        y: 4.0
+        z: 2.25
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'E12'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 4.0
+        z: 1.65
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 3.05
+        y: 4.0
+        z: 1.65
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'E13'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 4.0
+        z: 1.05
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 3.05
+        y: 4.0
+        z: 1.05
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'E14'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 4.0
+        z: 0.45
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 3.05
+        y: 4.0
+        z: 0.45
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'E15'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 0.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 3.05
+        y: 0.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'E16'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 1.26
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 3.05
+        y: 1.26
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'E17'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 1.86
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 3.05
+        y: 1.86
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'E18'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 2.46
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 3.05
+        y: 2.46
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'E19'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 3.06
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 3.05
+        y: 3.06
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'E20'
+    channels:
+      - ch: 0
+        x: 2.75
+        y: 3.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 3.05
+        y: 3.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'F01'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 0.0
+        z: 0.45
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 1.85
+        y: 0.0
+        z: 0.45
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'F02'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 0.0
+        z: 1.05
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 1.85
+        y: 0.0
+        z: 1.05
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'F03'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 0.0
+        z: 1.65
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 1.85
+        y: 0.0
+        z: 1.65
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'F04'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 0.0
+        z: 2.25
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 1.85
+        y: 0.0
+        z: 2.25
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'F05'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 0.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 1.85
+        y: 0.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'F06'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 1.26
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 1.85
+        y: 1.26
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'F07'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 1.86
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 1.85
+        y: 1.86
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'F08'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 2.46
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 1.85
+        y: 2.46
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'F09'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 3.06
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 1.85
+        y: 3.06
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'F10'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 3.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 1.85
+        y: 3.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'F11'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 4.0
+        z: 2.25
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 1.85
+        y: 4.0
+        z: 2.25
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'F12'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 4.0
+        z: 1.65
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 1.85
+        y: 4.0
+        z: 1.65
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'F13'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 4.0
+        z: 1.05
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 1.85
+        y: 4.0
+        z: 1.05
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'F14'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 4.0
+        z: 0.45
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 1.85
+        y: 4.0
+        z: 0.45
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'F15'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 0.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 1.85
+        y: 0.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'F16'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 1.26
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 1.85
+        y: 1.26
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'F17'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 1.86
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 1.85
+        y: 1.86
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'F18'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 2.46
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 1.85
+        y: 2.46
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'F19'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 3.06
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 1.85
+        y: 3.06
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'F20'
+    channels:
+      - ch: 0
+        x: 1.55
+        y: 3.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 1.85
+        y: 3.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'G01'
+    channels:
+      - ch: 0
+        x: 0.35
+        y: 0.0
+        z: 0.45
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 0.65
+        y: 0.0
+        z: 0.45
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'G02'
+    channels:
+      - ch: 0
+        x: 0.35
+        y: 0.0
+        z: 1.05
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 0.65
+        y: 0.0
+        z: 1.05
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'G03'
+    channels:
+      - ch: 0
+        x: 0.35
+        y: 0.0
+        z: 1.65
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 0.65
+        y: 0.0
+        z: 1.65
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'G04'
+    channels:
+      - ch: 0
+        x: 0.35
+        y: 0.0
+        z: 2.25
+        vx: 0
+        vy: 1
+        vz: 0
+      - ch: 1
+        x: 0.65
+        y: 0.0
+        z: 2.25
+        vx: 0
+        vy: 1
+        vz: 0
+  - tile: 'G05'
+    channels:
+      - ch: 0
+        x: 0.35
+        y: 0.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 0.65
+        y: 0.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'G06'
+    channels:
+      - ch: 0
+        x: 0.35
+        y: 1.26
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 0.65
+        y: 1.26
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'G07'
+    channels:
+      - ch: 0
+        x: 0.35
+        y: 1.86
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 0.65
+        y: 1.86
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'G08'
+    channels:
+      - ch: 0
+        x: 0.35
+        y: 2.46
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 0.65
+        y: 2.46
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'G09'
+    channels:
+      - ch: 0
+        x: 0.35
+        y: 3.06
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 0.65
+        y: 3.06
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'G10'
+    channels:
+      - ch: 0
+        x: 0.35
+        y: 3.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+      - ch: 1
+        x: 0.65
+        y: 3.66
+        z: 2.40
+        vx: 0
+        vy: 0
+        vz: -1
+  - tile: 'G11'
+    channels:
+      - ch: 0
+        x: 0.35
+        y: 4.0
+        z: 2.25
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 0.65
+        y: 4.0
+        z: 2.25
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'G12'
+    channels:
+      - ch: 0
+        x: 0.35
+        y: 4.0
+        z: 1.65
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 0.65
+        y: 4.0
+        z: 1.65
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'G13'
+    channels:
+      - ch: 0
+        x: 0.35
+        y: 4.0
+        z: 1.05
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 0.65
+        y: 4.0
+        z: 1.05
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'G14'
+    channels:
+      - ch: 0
+        x: 0.35
+        y: 4.0
+        z: 0.45
+        vx: 0
+        vy: -1
+        vz: 0
+      - ch: 1
+        x: 0.65
+        y: 4.0
+        z: 0.45
+        vx: 0
+        vy: -1
+        vz: 0
+  - tile: 'G15'
+    channels:
+      - ch: 0
+        x: 0.65
+        y: 0.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 0.35
+        y: 0.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'G16'
+    channels:
+      - ch: 0
+        x: 0.65
+        y: 1.26
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 0.35
+        y: 1.26
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'G17'
+    channels:
+      - ch: 0
+        x: 0.65
+        y: 1.86
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 0.35
+        y: 1.86
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'G18'
+    channels:
+      - ch: 0
+        x: 0.65
+        y: 2.46
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 0.35
+        y: 2.46
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'G19'
+    channels:
+      - ch: 0
+        x: 0.65
+        y: 3.06
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 0.35
+        y: 3.06
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+  - tile: 'G20'
+    channels:
+      - ch: 0
+        x: 0.65
+        y: 3.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
+      - ch: 1
+        x: 0.35
+        y: 3.66
+        z: 0
+        vx: 0
+        vy: 0
+        vz: 1
