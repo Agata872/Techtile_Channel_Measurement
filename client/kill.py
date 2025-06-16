@@ -20,7 +20,7 @@ def extract_hosts_from_group(inventory, group_name):
 
 def run_check_and_kill(target, user):
     ssh_prefix = f"{user}@{target}"
-    check_cmd = "sudo lsof -i :5557 -t"
+    check_cmd = "sudo lsof -i :50001 -t"
 
     try:
         # 通过 SSH 执行检查命令
@@ -41,7 +41,7 @@ def run_check_and_kill(target, user):
                 subprocess.run(["ssh", ssh_prefix, kill_cmd])
                 print(f"🗡️  [{ssh_prefix}] 已终止 PID {pid}")
         else:
-            print(f"✅ [{ssh_prefix}] 无监听 5557 的进程，跳过。")
+            print(f"✅ [{ssh_prefix}] 无监听 50001 的进程，跳过。")
 
     except subprocess.TimeoutExpired:
         print(f"⚠️  [{ssh_prefix}] SSH 超时，跳过。")
