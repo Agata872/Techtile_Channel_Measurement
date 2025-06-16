@@ -41,7 +41,7 @@ def run_check_and_kill(target, user):
                 subprocess.run(["ssh", ssh_prefix, kill_cmd])
                 print(f"🗡️  [{ssh_prefix}] 已终止 PID {pid}")
         else:
-            print(f"✅ [{ssh_prefix}] 无监听 50001 的进程，跳过。")
+            print(f"✅ [{ssh_prefix}] 无监听 5557 的进程，跳过。")
 
     except subprocess.TimeoutExpired:
         print(f"⚠️  [{ssh_prefix}] SSH 超时，跳过。")
