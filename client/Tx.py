@@ -14,15 +14,15 @@ import zmq
 import queue
 import tools
 
-# 全局常量（默认值可被 cal-settings.yml 中的配置覆盖）
-CMD_DELAY = 0.05               # 命令间延时 50ms
-RX_TX_SAME_CHANNEL = True      # 若环回由同一通道进行
-CLOCK_TIMEOUT = 1000           # 外部时钟锁定超时（ms）
-INIT_DELAY = 0.2               # 发射前延时 200ms
+# Global constants (default values can be overridden by cal-settings.yml)
+CMD_DELAY = 0.05               # Delay between commands: 50ms
+RX_TX_SAME_CHANNEL = True      # Whether loopback uses the same channel
+CLOCK_TIMEOUT = 1000           # Timeout for external clock lock (ms)
+INIT_DELAY = 0.2               # Delay before transmission: 200ms
 RATE = 250e3
-LOOPBACK_TX_GAIN = 70          # 发射增益（经验值）
-RX_GAIN = 22                 # 接收增益（经验值）
-CAPTURE_TIME = 10              # 发射（或测量）时长，单位秒
+LOOPBACK_TX_GAIN = 70          # TX gain (empirical)
+RX_GAIN = 22                   # RX gain (empirical)
+CAPTURE_TIME = 10              # Transmission (or measurement) duration in seconds
 FREQ = 0
 meas_id = 0
 exp_id = 0
@@ -31,19 +31,19 @@ results = []
 SWITCH_LOOPBACK_MODE = 0x00000006
 SWITCH_RESET_MODE = 0x00000000
 
-# 初始化 ZMQ （此处虽然 TX 任务不发送 IQ 数据，但保留初始化代码）
+# Initialize ZMQ (TX task doesn't send IQ data, but initialization is retained)
 context = zmq.Context()
 iq_socket = context.socket(zmq.PUB)
 iq_socket.bind(f"tcp://*:{50001}")
 
 HOSTNAME = socket.gethostname()[4:]
 file_open = False
-server_ip = None  # 此处暂不使用
+server_ip = None  # Currently not used
 
-# 读取 cal-settings.yml 配置文件（如有）
+# Read configuration from cal-settings.yml (if available)
 with open(os.path.join(os.path.dirname(__file__), "cal-settings.yml"), "r") as file:
     vars = yaml.safe_load(file)
-    globals().update(vars)  # 更新全局变量
+    globals().update(vars)  # Update global variables
 
 # Setup logger with custom timestamp formatting
 class LogFormatter(logging.Formatter):
@@ -67,7 +67,7 @@ formatter = LogFormatter(fmt="[%(asctime)s] [%(levelname)s] (%(threadName)-10s) 
 console.setFormatter(formatter)
 logger.addHandler(console)
 
-# 根据 RX_TX_SAME_CHANNEL 定义通道角色
+# Define channel roles depending on RX_TX_SAME_CHANNEL
 if RX_TX_SAME_CHANNEL:
     REF_RX_CH = FREE_TX_CH = 0
     LOOPBACK_RX_CH = LOOPBACK_TX_CH = 1
@@ -77,9 +77,8 @@ else:
     REF_RX_CH = LOOPBACK_TX_CH = 1
     logger.debug("\nPLL REF-->CH1 RX\nCH1 TX-->CH0 RX\nCH0 TX -->")
 
-
 # -------------------------------
-# 初始化与设置函数（直接沿用原脚本）
+# Initialization and setup functions (inherited from original script)
 # -------------------------------
 def setup_clock(usrp, clock_src, num_mboards):
     usrp.set_clock_source(clock_src)
@@ -156,9 +155,9 @@ def setup(usrp, server_ip, connect=False):
         usrp.set_rx_dc_offset(True, chan)
         usrp.set_rx_bandwidth(rx_bw, chan)
         usrp.set_rx_agc(False, chan)
-    # 发射端设置：使用指定的 TX 通道（这里根据 RX_TX_SAME_CHANNEL，发射信号使用 FREE_TX_CH）
+    # TX-side settings: use the specified TX channel (based on RX_TX_SAME_CHANNEL, signal is transmitted on FREE_TX_CH)
     usrp.set_tx_gain(LOOPBACK_TX_GAIN, FREE_TX_CH)
-    # 此外可设置接收增益（虽然本 TX 脚本不采集，但为了保持配置一致）
+    # Optionally set RX gain (even though TX script doesn't receive, for config consistency)
     usrp.set_rx_gain(RX_GAIN, REF_RX_CH)
     st_args = uhd.usrp.StreamArgs("fc32", "sc16")
     st_args.channels = channels
@@ -170,13 +169,13 @@ def setup(usrp, server_ip, connect=False):
     logger.debug("[SYNC] Resetting time.")
     logger.info(f"RX GAIN PROFILE CH0: {usrp.get_rx_gain_names(0)}")
     logger.info(f"RX GAIN PROFILE CH1: {usrp.get_rx_gain_names(1)}")
-    time.sleep(2)  # 等待 PPS 上升沿
+    time.sleep(2)  # Wait for PPS rising edge
     tune_usrp(usrp, FREQ, channels, at_time=INIT_DELAY)
     logger.info(f"USRP tuned and setup. (Current time: {usrp.get_time_now().get_real_secs()})")
     return tx_streamer, rx_streamer
 
 # -------------------------------
-# 发射相关函数：tx_ref、tx_thread、tx_meta_thread
+# Transmission-related functions: tx_ref, tx_thread, tx_meta_thread
 # -------------------------------
 def tx_ref(usrp, tx_streamer, quit_event, phase, amplitude, start_time=None):
     num_channels = tx_streamer.get_num_channels()
@@ -236,25 +235,25 @@ def get_current_time(usrp):
     return usrp.get_time_now().get_real_secs()
 
 # -------------------------------
-# 主程序：执行发射任务（同步控制后启动）
+# Main function: run transmission task (after synchronization control)
 # -------------------------------
 def main():
     try:
-        # 初始化 USRP 设备并加载 FPGA 固件
+        # Initialize USRP device and load FPGA image
         usrp = uhd.usrp.MultiUSRP("enable_user_regs, fpga=usrp_b210_fpga_loopback_ctrl.bin, mode_n=integer")
         logger.info("Using Device: %s", usrp.get_pp_string())
 
-        # 完成硬件设置、同步与调谐，获得 TX 与 RX streamer
+        # Complete hardware setup, synchronization, tuning, and get TX and RX streamers
         tx_streamer, rx_streamer = setup(usrp, server_ip, connect=False)
         quit_event = threading.Event()
 
         # =========================
-        # 新增：与同步服务器进行通信
+        # New: Communicate with sync server
         # =========================
-        # 请将下面的 IP 修改为你的同步服务器实际IP地址
+        # Please modify the IP below to match your actual sync server IP
         sync_server_ip = "192.108.1.147"
         sync_context = zmq.Context()
-        # 建立 REQ socket 与服务器的 alive 端口（5558）通信
+        # Create REQ socket to communicate with server's "alive" port (5558)
         alive_client = sync_context.socket(zmq.REQ)
         alive_client.connect(f"tcp://{sync_server_ip}:5558")
         alive_message = f"{HOSTNAME} TX alive"
@@ -263,7 +262,7 @@ def main():
         reply = alive_client.recv_string()
         logger.info("Received alive reply from sync server: %s", reply)
 
-        # 建立 SUB socket 监听同步消息（5557 端口）
+        # Create SUB socket to listen to sync messages (port 5557)
         sync_subscriber = sync_context.socket(zmq.SUB)
         sync_subscriber.connect(f"tcp://{sync_server_ip}:5557")
         sync_subscriber.setsockopt_string(zmq.SUBSCRIBE, "")
@@ -272,20 +271,20 @@ def main():
         logger.info("Received SYNC message: %s", sync_msg)
         # =========================
 
-        # 同步后，根据当前时间调度 TX 发射
+        # After synchronization, schedule TX based on current time
         current_time = get_current_time(usrp)
-        # 此处可设置一个短延时（例如 0.2 秒）确保配置完成后开始发射
+        # A short delay (e.g., 0.2s) can be added to ensure TX starts after config
         start_time_val = current_time + 0.2
         start_time_spec = uhd.types.TimeSpec(start_time_val)
         logger.info("Scheduled TX start time: %.6f", start_time_val)
 
-        # 启动 TX 发射线程：此处信号参数设为幅度 1.0，相位 0.0（两个通道）
+        # Start TX thread with amplitude=1.0, phase=0.0 (both channels)
         tx_thr = tx_thread(usrp, tx_streamer, quit_event, phase=[0.0, 0.0], amplitude=[0.8, 0.8],
                            start_time=start_time_spec)
-        # 同时启动 TX 异步元数据监控线程
+        # Also start TX async metadata monitor thread
         tx_meta_thr = tx_meta_thread(tx_streamer, quit_event)
 
-        # 运行一段时间后停止发射
+        # Stop transmission after a certain duration
         time.sleep(CAPTURE_TIME + 10.0)
         quit_event.set()
         tx_thr.join()
