@@ -46,7 +46,7 @@ def run_remote_script(target, script_path):
         print(f"❌ 调用 {target} 上脚本失败: {e}")
 
 def main():
-    TX_NAME = "A05"
+    TX_NAME = "A06"
     RX_GROUP_NAME = "A07"  # ceiling
 
     inventory_file = "inventory.yaml"
