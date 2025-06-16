@@ -47,7 +47,7 @@ def run_remote_script(target, script_path):
 
 def main():
     TX_NAME = "A06"
-    RX_GROUP_NAME = "A07"  # ceiling
+    RX_NAMES = "A07"  # ceiling
 
     inventory_file = "inventory.yaml"
     inventory = load_inventory(inventory_file)
@@ -56,7 +56,7 @@ def main():
     all_hosts = inventory.get("all", {}).get("hosts", {})
 
     # ✅ 提取接收端组内的所有主机名
-    RX_NAMES = extract_hosts_from_group(inventory, RX_GROUP_NAME)
+    # RX_NAMES = extract_hosts_from_group(inventory, RX_GROUP_NAME)
 
     # 检查 TX 是否存在
     if TX_NAME not in all_hosts:
@@ -69,7 +69,7 @@ def main():
     tx_target = f"{global_user}@{tx_ip}"
 
     TX_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Tx.py"
-    RX_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Tx.py"
+    RX_SCRIPT_PATH = "~/Techtile_Channel_Measurement/client/Rx.py"
 
     print(f"🚀 启动发射端 {TX_NAME} ({tx_target}) ...")
     tx_thread = threading.Thread(target=run_remote_script, args=(tx_target, TX_SCRIPT_PATH))
