@@ -47,7 +47,7 @@ def run_remote_script(target, script_path):
 
 def main():
     TX_NAME = "A06"
-    RX_NAMES = "A07"  # ceiling
+    RX_NAMES = ["A07"]  # ceiling
 
     inventory_file = "inventory.yaml"
     inventory = load_inventory(inventory_file)
